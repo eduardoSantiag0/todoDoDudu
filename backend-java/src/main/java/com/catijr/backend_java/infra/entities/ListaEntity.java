@@ -19,7 +19,7 @@ public class ListaEntity {
     @Column(name = "nome", nullable = false, unique = true)
     private String nome;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TarefaEntity> tarefas = new ArrayList<>();
 
     public ListaEntity() {

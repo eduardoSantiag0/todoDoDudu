@@ -1,9 +1,10 @@
 package com.catijr.backend_java.application.controllers;
 
-import com.catijr.backend_java.application.dtos.AtualizarDadosTarefaRequest;
-import com.catijr.backend_java.application.dtos.CriarTarefasRequest;
+import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosTarefaRequest;
+import com.catijr.backend_java.application.dtos.criar.CriarTarefasRequest;
 import com.catijr.backend_java.application.dtos.TarefaDTO;
 import com.catijr.backend_java.services.TarefaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class TarefasController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> criarTarefas (@RequestBody CriarTarefasRequest dto) {
+    public ResponseEntity<?> criarTarefas (@Valid @RequestBody CriarTarefasRequest dto) {
         service.criarTarefas(dto);
         return ResponseEntity.ok("Tarefa criada com sucesso!");
     }

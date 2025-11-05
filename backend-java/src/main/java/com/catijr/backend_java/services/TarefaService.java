@@ -1,8 +1,8 @@
 package com.catijr.backend_java.services;
 
 
-import com.catijr.backend_java.application.dtos.AtualizarDadosTarefaRequest;
-import com.catijr.backend_java.application.dtos.CriarTarefasRequest;
+import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosTarefaRequest;
+import com.catijr.backend_java.application.dtos.criar.CriarTarefasRequest;
 import com.catijr.backend_java.application.dtos.TarefaDTO;
 import com.catijr.backend_java.application.errors.DataConclusaoDeveSerNoFuturoException;
 import com.catijr.backend_java.application.errors.ListaNaoEncontradaException;
@@ -11,6 +11,7 @@ import com.catijr.backend_java.infra.entities.ListaEntity;
 import com.catijr.backend_java.infra.entities.TarefaEntity;
 import com.catijr.backend_java.infra.repositories.ListaRepository;
 import com.catijr.backend_java.infra.repositories.TarefaRepository;
+import com.catijr.backend_java.services.mappers.TarefaMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -28,8 +29,8 @@ public class TarefaService {
         this.tarefaRepository = tarefaRepository;
     }
 
-    private void verificaNovaData (AtualizarDadosTarefaRequest dto) {
-        if (dto.dataEsperadaDeConclusao().get().isBefore(LocalDate.now())) {
+    private void verificaNovaData (LocalDate dtoData) {
+        if (dtoData.isBefore(LocalDate.now())) {
             throw new DataConclusaoDeveSerNoFuturoException("Data de conclusão deve ser no futuro.");
         }
     }
@@ -37,6 +38,9 @@ public class TarefaService {
 
     @Transactional
     public void criarTarefas(CriarTarefasRequest dto) {
+
+        verificaNovaData(dto.dataConclusao());
+
         ListaEntity lista = listaRepository.findById(dto.listaId())
                 .orElseThrow(() -> new ListaNaoEncontradaException("Lista não encontrada"));
 
@@ -80,7 +84,7 @@ public class TarefaService {
             tarefa.setDataConclusaoEsperada(dto.dataConcluido().get());
         }
         if (dto.dataEsperadaDeConclusao().isPresent()) {
-            verificaNovaData(dto);
+            verificaNovaData(dto.dataEsperadaDeConclusao().get());
             tarefa.setDataConclusaoEsperada(dto.dataEsperadaDeConclusao().get());
         }
 

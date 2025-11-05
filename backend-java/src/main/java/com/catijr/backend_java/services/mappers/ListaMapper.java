@@ -1,4 +1,4 @@
-package com.catijr.backend_java.services;
+package com.catijr.backend_java.services.mappers;
 
 import com.catijr.backend_java.application.dtos.ListaDTO;
 import com.catijr.backend_java.infra.entities.ListaEntity;

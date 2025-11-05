@@ -1,10 +1,9 @@
 package com.catijr.backend_java.infra.entities;
 
-import com.catijr.backend_java.application.dtos.CriarTarefasRequest;
+import com.catijr.backend_java.application.dtos.criar.CriarTarefasRequest;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "tarefas")

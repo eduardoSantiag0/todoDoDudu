@@ -1,9 +1,10 @@
 package com.catijr.backend_java.application.controllers;
 
-import com.catijr.backend_java.application.dtos.AtualizarDadosListaRequest;
-import com.catijr.backend_java.application.dtos.CriarListasRequest;
+import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosListaRequest;
+import com.catijr.backend_java.application.dtos.criar.CriarListasRequest;
 import com.catijr.backend_java.application.dtos.ListaDTO;
 import com.catijr.backend_java.services.ListasService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class ListasController {
 
 
     @PostMapping()
-    public ResponseEntity<?> criarLista(@RequestBody CriarListasRequest dto) {
+    public ResponseEntity<?> criarLista(@RequestBody @Valid  CriarListasRequest dto) {
         service.criarLisa(dto);
         return ResponseEntity.ok("Lista criada com sucesso!");
     }

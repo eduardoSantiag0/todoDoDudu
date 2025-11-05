@@ -1,11 +1,12 @@
 package com.catijr.backend_java.services;
 
-import com.catijr.backend_java.application.dtos.CriarListasRequest;
+import com.catijr.backend_java.application.dtos.criar.CriarListasRequest;
 import com.catijr.backend_java.application.dtos.ListaDTO;
 import com.catijr.backend_java.application.errors.ListaNaoEncontradaException;
 import com.catijr.backend_java.application.errors.NomeListaJaExisteException;
 import com.catijr.backend_java.infra.entities.ListaEntity;
 import com.catijr.backend_java.infra.repositories.ListaRepository;
+import com.catijr.backend_java.services.mappers.ListaMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,10 @@ public class ListasService {
 
     @Transactional
     public void criarLisa(CriarListasRequest dto) {
+
+        if (dto.nome().isEmpty()) {
+            throw new IllegalArgumentException();
+        }
 
         if (listaRepository.existsByNome(dto.nome())) {
             throw new NomeListaJaExisteException("Já existe uma lista com esse nome");
