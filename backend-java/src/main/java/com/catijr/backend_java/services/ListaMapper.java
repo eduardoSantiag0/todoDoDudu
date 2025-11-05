@@ -1,0 +1,17 @@
+package com.catijr.backend_java.services;
+
+import com.catijr.backend_java.application.dtos.ListaDTO;
+import com.catijr.backend_java.infra.entities.ListaEntity;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ListaMapper {
+
+    public static ListaDTO toDTO(ListaEntity lista) {
+        return new ListaDTO(
+                lista.getPublicId(),
+                lista.getNome()
+        );
+    }
+
+}
