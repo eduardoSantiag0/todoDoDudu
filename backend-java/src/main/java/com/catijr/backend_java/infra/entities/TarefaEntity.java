@@ -1,5 +1,6 @@
 package com.catijr.backend_java.infra.entities;
 
+import com.catijr.backend_java.application.dtos.CriarTarefasRequest;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -10,55 +11,90 @@ import java.util.UUID;
 public class TarefaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "lista_id", nullable = false)
-    private ListaEntity publicId;
+    private ListaEntity lista;
 
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    private String description;
+    @Column(name = "descricao")
+    private String descricao;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "prioridade", nullable = false)
-    private Prioridade priority;
+    private EPrioridade prioridade;
 
-    @Column(name = "data_conclusao")
-    private LocalDate data;
+    @Column(name = "data_conclusao_esperada")
+    private LocalDate dataConclusaoEsperada;
 
 
     public TarefaEntity() {
     }
 
-    public TarefaEntity(ListaEntity listaId, String nome, String description,
-                        Prioridade priority, LocalDate data) {
-        this.publicId = listaId;
+    public TarefaEntity(ListaEntity lista, String nome, String descricao,
+            EPrioridade prioridade, LocalDate dataConclusao) {
+        this.lista = lista;
         this.nome = nome;
-        this.description = description;
-        this.priority = priority;
-        this.data = data;
+        this.descricao = descricao;
+        this.prioridade = prioridade;
+        this.dataConclusaoEsperada = dataConclusao;
     }
 
-    public ListaEntity getPublicId() {
-        return publicId;
+    public static TarefaEntity of(CriarTarefasRequest dto, ListaEntity lista) {
+        return new TarefaEntity(
+                lista,
+                dto.nome(),
+                dto.descricao(),
+                dto.prioridade(),
+                dto.dataConclusao());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+
+    public ListaEntity getLista() {
+        return lista;
+    }
+
+    public LocalDate getDataConclusaoEsperada() {
+        return dataConclusaoEsperada;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public Prioridade getPriority() {
-        return priority;
+    public EPrioridade getPrioridade() {
+        return prioridade;
     }
 
     public LocalDate getData() {
-        return data;
+        return dataConclusaoEsperada;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescription(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setPrioridade(EPrioridade prioridade) {
+        this.prioridade = prioridade;
+    }
+
+    public void setDataConclusaoEsperada(LocalDate dataConclusaoEsperada) {
+        this.dataConclusaoEsperada = dataConclusaoEsperada;
     }
 }

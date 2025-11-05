@@ -36,14 +36,13 @@ public class ListasService {
     public List<ListaDTO> retornarListas() {
         List<ListaEntity> entidades = listaRepository.findAll();
 
-
         return entidades.stream()
                 .map(ListaMapper::toDTO)
                 .toList();
     }
 
     public ListaDTO buscarListaPorId(Long id) {
-        ListaEntity lista = listaRepository.findByPublicId(id)
+        ListaEntity lista = listaRepository.findById(id)
                 .orElseThrow(() -> new ListaNaoEncontradaException("Não foi possivel encontrar essa lista"));
 
         return ListaMapper.toDTO(lista);
@@ -51,24 +50,26 @@ public class ListasService {
 
     @Transactional
     public ListaDTO atualizarListaPorId(Long id, String novoNome) {
-        ListaEntity lista = listaRepository.findByPublicId(id)
+        ListaEntity lista = listaRepository.findById(id)
                 .orElseThrow(() -> new ListaNaoEncontradaException("Não foi possivel encontrar essa lista"));
 
-        if (!lista.getNome().equals(novoNome) && listaRepository.existsByNome(novoNome)) {
+        if (listaRepository.existsByNome(novoNome)) {
             throw new NomeListaJaExisteException("Já existe uma lista com esse nome");
         }
+
         lista.setNome(novoNome);
         ListaEntity atualizada = listaRepository.save(lista);
 
         return ListaMapper.toDTO(atualizada);
     }
-//
-//    @Transactional
-//    public void deletarLista(Long id) {
-//        ListaEntity lista = listaRepository.findByPublicId(id)
-//                .orElseThrow(() -> new ListaNaoEncontradaException("Não foi possivel encontrar essa lista"));
-//
-//
-//
-//    }
+
+    @Transactional
+    public void deletarLista(Long id) {
+        ListaEntity lista = listaRepository.findById(id)
+                .orElseThrow(() -> new ListaNaoEncontradaException
+                        ("Não foi possivel encontrar essa lista"));
+
+        listaRepository.delete(lista);
+
+    }
 }

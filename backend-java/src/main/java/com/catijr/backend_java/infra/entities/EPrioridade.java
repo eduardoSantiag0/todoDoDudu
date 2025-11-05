@@ -1,6 +1,6 @@
 package com.catijr.backend_java.infra.entities;
 
-public enum Prioridade {
+public enum EPrioridade {
     LOW,
     MEDIUM,
     HIGH,

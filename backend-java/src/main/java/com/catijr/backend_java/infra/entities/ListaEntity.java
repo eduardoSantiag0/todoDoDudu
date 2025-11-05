@@ -1,6 +1,8 @@
 package com.catijr.backend_java.infra.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +13,13 @@ import java.util.UUID;
 public class ListaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Column(name = "public_id", nullable = false,
-            unique = true, columnDefinition = "serial")
-    private Long publicId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "nome", nullable = false, unique = true)
     private String nome;
 
-    @OneToMany(mappedBy = "publicId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<TarefaEntity> tarefas = new ArrayList<>();
 
     public ListaEntity() {
@@ -31,16 +29,12 @@ public class ListaEntity {
         this.nome = nome;
     }
 
-    public void adicionarTarefa (TarefaEntity entidade) {
+    public void adicionarTarefa(TarefaEntity entidade) {
         this.tarefas.add(entidade);
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
-    }
-
-    public Long getPublicId() {
-        return publicId;
     }
 
     public String getNome() {

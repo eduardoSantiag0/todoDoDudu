@@ -43,9 +43,9 @@ public class ListasController {
         return ResponseEntity.ok(service.atualizarListaPorId(id, dto.nome()));
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> deletarLista (@PathVariable Long id) {
-//        service.deletarLista(id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletarLista (@PathVariable Long id) {
+        service.deletarLista(id);
+        return ResponseEntity.noContent().build();
+    }
 }

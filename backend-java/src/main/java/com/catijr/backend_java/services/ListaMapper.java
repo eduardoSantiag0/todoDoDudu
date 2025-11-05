@@ -9,7 +9,7 @@ public class ListaMapper {
 
     public static ListaDTO toDTO(ListaEntity lista) {
         return new ListaDTO(
-                lista.getPublicId(),
+                lista.getId(),
                 lista.getNome()
         );
     }
