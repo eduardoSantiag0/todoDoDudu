@@ -24,9 +24,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TarefaServiceTest {
@@ -59,9 +57,10 @@ class TarefaServiceTest {
     }
 
 
+    // CRIAR
     @Test
     void quandoListaExiste_DeveCriarTarefa() {
-        CriarTarefasRequest request = new CriarTarefasRequest(
+        CriarTarefasRequest req = new CriarTarefasRequest(
                 1L,
                 "Descrição",
                 "",
@@ -72,7 +71,7 @@ class TarefaServiceTest {
         when(listaRepository.findById(1L)).thenReturn(Optional.of(listaEntidade));
         when(tarefaRepository.save(any(TarefaEntity.class))).thenReturn(tarefa);
 
-        assertDoesNotThrow(() -> tarefaService.criarTarefas(request));
+        assertDoesNotThrow(() -> tarefaService.criarTarefas(req));
 
         verify(tarefaRepository, times(1)).save(any(TarefaEntity.class));
     }
@@ -95,6 +94,8 @@ class TarefaServiceTest {
                 () -> tarefaService.criarTarefas(request));
     }
 
+    //BUSCAR
+
     @Test
     void deveListarTodasAsTarefas() {
         when(tarefaRepository.findAll()).thenReturn(List.of(tarefa));
@@ -102,7 +103,7 @@ class TarefaServiceTest {
         List<TarefaDTO> tarefas = tarefaService.listarTodas();
 
         assertEquals(1, tarefas.size());
-        assertEquals(NOME_TAREFA, tarefas.get(0).nome());
+        assertEquals(NOME_TAREFA, tarefas.getFirst().nome());
     }
 
     @Test
@@ -122,16 +123,18 @@ class TarefaServiceTest {
                 () -> tarefaService.buscarTarefaPorId(1L));
     }
 
+    // ATUALIZAR
+
     @Test
     void deveAtualizarTarefa() {
         String novoNome = "Novo nome";
 
         TarefaEntity entidadeAtualizada = new TarefaEntity(
-                        listaEntidade,
-                        novoNome,
-                        "Aumentar precisao",
-                        EPrioridade.HIGH,
-                        LocalDate.now().plusDays(2)
+                listaEntidade,
+                novoNome,
+                "Aumentar precisao",
+                EPrioridade.HIGH,
+                LocalDate.now().plusDays(2)
         );
 
         when(tarefaRepository.save(any(TarefaEntity.class))).thenReturn(entidadeAtualizada);
@@ -158,18 +161,34 @@ class TarefaServiceTest {
     void quandoDataDeConclusaoForNoPassado_DeveLancarExcecao() {
         when(tarefaRepository.findById(1L)).thenReturn(Optional.of(tarefa));
 
-        AtualizarDadosTarefaRequest request = new AtualizarDadosTarefaRequest(
+        AtualizarDadosTarefaRequest tarefaComDataOntem = new AtualizarDadosTarefaRequest(
+                Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
                 Optional.of(LocalDate.now().minusDays(1)),
-                Optional.empty(),
                 Optional.of(1L)
         );
 
         assertThrows(DataConclusaoDeveSerNoFuturoException.class,
-                () -> tarefaService.atualizarTarefaPorId(1L, request));
+                () -> tarefaService.atualizarTarefaPorId(1L, tarefaComDataOntem));
     }
+
+    @Test
+    void quandoTenatrAtualizarETarefaNaoExiste_DeveLancarErro() {
+
+        Long idInexistente = 300L;
+
+        when(tarefaRepository.findById(idInexistente)).thenReturn(Optional.empty());
+
+        assertThrows(TarefaNaoEncontradaException.class,
+                () -> tarefaService.atualizarTarefaPorId(idInexistente, any(AtualizarDadosTarefaRequest.class)));
+
+        verify(tarefaRepository, never()).save(any(TarefaEntity.class));
+
+    }
+
+    // DELETAR
 
     @Test
     void deveDeletarTarefaComSucesso() {

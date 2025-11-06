@@ -1,5 +1,6 @@
 package com.catijr.backend_java.services;
 
+import com.catijr.backend_java.application.dtos.ListaCriadaResponse;
 import com.catijr.backend_java.application.dtos.criar.CriarListasRequest;
 import com.catijr.backend_java.application.dtos.ListaDTO;
 import com.catijr.backend_java.application.errors.ListaNaoEncontradaException;
@@ -22,19 +23,21 @@ public class ListasService {
     }
 
     @Transactional
-    public void criarLisa(CriarListasRequest dto) {
+    public ListaCriadaResponse criarLisa(CriarListasRequest dto) {
 
-        if (dto.nome().isEmpty()) {
+        if (dto.nomeLista().isEmpty()) {
             throw new IllegalArgumentException();
         }
 
-        if (listaRepository.existsByNome(dto.nome())) {
+        if (listaRepository.existsByNome(dto.nomeLista())) {
             throw new NomeListaJaExisteException("Já existe uma lista com esse nome");
         }
 
-        ListaEntity novaLista = new ListaEntity(dto.nome());
+        ListaEntity novaLista = new ListaEntity(dto.nomeLista());
 
         listaRepository.save(novaLista);
+
+        return new ListaCriadaResponse(novaLista.getId(), novaLista.getNome());
 
     }
 

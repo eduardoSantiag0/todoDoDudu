@@ -1,6 +1,6 @@
 package com.catijr.backend_java.application.dtos;
 
-public record ListaDTO(
+public record ListaCriadaResponse(
         Long id,
         String nome
 ) {

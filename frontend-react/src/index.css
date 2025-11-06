@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 
 @theme {
   --color-bg: #252628;
@@ -17,4 +17,69 @@
   --color-veryHighPrioText: #5F0F0B;
   
   --font-family-poppins: 'Poppins', system-ui, sans-serif;
+} */
+
+@import "tailwindcss";
+
+/* Tema com nomes descritivos */
+@theme {
+  /* Fundo e estados gerais */
+  --color-background-main: #252628;
+  --color-background-secondary: #5b5b5b;
+  --color-text-default: #f5f5f5;
+  --color-text-muted: #646570;
+  --color-success-background: #029008;
+  --color-danger-background: #af0505;
+
+  /* Prioridades */
+  --color-priority-low-background: #46f7b7;
+  --color-priority-low-text: #096343;
+
+  --color-priority-medium-background: #f5eb88;
+  --color-priority-medium-text: #653408;
+
+  --color-priority-high-background: #ffa775;
+  --color-priority-high-text: #702d08;
+
+  --color-priority-very-high-background: #f27f77;
+  --color-priority-very-high-text: #5f0f0b;
+
+  /* Fonte */
+  --font-poppins: "Poppins", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+/* Estilo base */
+body {
+  @apply bg-background-main text-text-default font-poppins;
+}
+
+/* Utilitários simples */
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-primary {
+  @apply bg-success-background text-white hover:bg-danger-background/90;
+}
+
+.btn-secondary {
+  @apply bg-background-secondary text-text-default hover:bg-background-secondary/80;
+}
+
+.btn-ghost {
+  @apply text-text-muted hover:bg-background-secondary/40;
+}
+
+.card {
+  @apply rounded-xl bg-background-secondary/40 shadow-sm ring-1 ring-background-secondary/40;
+}
+
+.input {
+  @apply w-full rounded-lg border border-text-muted px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-success-background bg-background-main text-text-default placeholder:text-text-muted;
+}
+
+.label {
+  @apply text-xs font-medium text-text-muted;
 }

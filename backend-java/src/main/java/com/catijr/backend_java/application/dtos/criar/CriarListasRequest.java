@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CriarListasRequest(
         @NotBlank
-        String nome
+        String nomeLista
 ) {
 }
