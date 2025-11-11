@@ -10,5 +10,5 @@ public record TarefaDTO(
         String descricao,
         EPrioridade prioridade,
         LocalDate dataEsperadaDeConclusao,
-        LocalDate dataConcluida
+        LocalDate concluidoEm
 ) {}

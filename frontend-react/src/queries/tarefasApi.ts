@@ -1,10 +1,10 @@
-import { clienteApi } from "./clienteApi";
+import { clienteApi } from './clienteApi'
 import type {
-  Tarefa,
   IdentificadorTarefa,
   PrioridadeTarefa,
-} from "../types/tarefa";
-import type { ListId } from "../types/lista";
+  Tarefa,
+} from '../types/tarefa'
+import type { ListId } from '../types/lista'
 
 
 export interface TarefaRespostaBackend {
@@ -14,7 +14,7 @@ export interface TarefaRespostaBackend {
   descricao: string | null;
   prioridade: PrioridadeTarefa;
   dataConclusaoEsperada: string | null;
-  concluidaEm: string | null;
+  concluidoEm: string | null;
 }
 
 export interface TarefaCriadaResposta {
@@ -23,8 +23,8 @@ export interface TarefaCriadaResposta {
   nome: string;
   descricao: string | null;
   prioridade: PrioridadeTarefa;
-  dataConclusaoEsperada: string; 
-  concluidaEm?: string | null;
+  dataConclusaoEsperada: string;
+  concluidoEm?: string | null;
 }
 
 export interface CriarTarefaRequisicao {
@@ -32,14 +32,14 @@ export interface CriarTarefaRequisicao {
   nome: string;
   descricao?: string;
   prioridade: PrioridadeTarefa;
-  dataConclusaoEsperada: string; 
+  dataConclusaoEsperada: string;
 }
 
 export interface AtualizarTarefaRequisicao {
   nome?: string;
   descricao?: string;
   prioridade?: PrioridadeTarefa;
-  dataFinalizada?: string | null;
+  concluidoEm?: string | null;
   dataEsperadaDeConclusao?: string;
   novaListaId?: ListId;
 }
@@ -51,56 +51,68 @@ export interface TarefaRespostaDTO {
   descricao: string | null;
   prioridade: PrioridadeTarefa;
   dataEsperadaDeConclusao: string;
-  dataConcluida: string; 
+  concluidoEm: string;
 }
 
-
-// export async function buscarTodasAsTarefas(): Promise<Tarefa[]> {
-//   const resposta = await clienteApi.get<TarefaRespostaDTO[]>(
-//     "/tasks/all"
-//   );
-
-//   const tarefasBackend = resposta.data;
-
-//   const tarefasConvertidas: Tarefa[] = tarefasBackend.map(
-//     (tarefaResposta) => ({
-//       id: tarefaResposta.id,
-//       listaId: tarefaResposta.listaId,
-//       nome: tarefaResposta.nome,
-//       descricao: tarefaResposta.descricao ?? undefined,
-//       prioridade: tarefaResposta.prioridade,
-//       dataPrevistaConclusao: tarefaResposta.dataEsperadaDeConclusao,
-//       dataFinalizada: tarefaResposta.dataConcluida,
-//     })
-//   );
-
-//   return tarefasConvertidas;
-// }
 
 export async function buscarTodasAsTarefas(): Promise<Tarefa[]> {
-  const resposta = await clienteApi.get("/tasks/all");
-  const tarefas = resposta.data as Tarefa[];
-  return tarefas;
+  const resposta = await clienteApi.get<TarefaRespostaDTO[]>(
+    '/tasks/all',
+  )
+
+  const tarefasBackend = resposta.data
+
+  const tarefasConvertidas: Tarefa[] = tarefasBackend.map(
+    (tarefaResposta) => ({
+      id: tarefaResposta.id,
+      listaId: tarefaResposta.listaId,
+      nome: tarefaResposta.nome,
+      descricao: tarefaResposta.descricao ?? undefined,
+      prioridade: tarefaResposta.prioridade,
+      dataPrevistaConclusao: tarefaResposta.dataEsperadaDeConclusao,
+      dataFinalizada: tarefaResposta.concluidoEm,
+    }),
+  )
+
+  return tarefasConvertidas
 }
 
 
 
-export async function buscarTarefaPorId( idTarefa: IdentificadorTarefa ): Promise<Tarefa> {
-  const resposta = await clienteApi.get(`/tasks/${idTarefa}`);
-  const tarefa = resposta.data as Tarefa;
-  return tarefa;
-}
+// export async function buscarTarefaPorId( idTarefa: IdentificadorTarefa ): Promise<Tarefa> {
+//   const resposta = await clienteApi.get(`/tasks/${idTarefa}`)
+//   const tarefa = resposta.data as Tarefa
+//   return tarefa
+// }
 
+export async function buscarTarefaPorId(
+  idTarefa: IdentificadorTarefa,
+): Promise<Tarefa> {
+  const resposta = await clienteApi.get<TarefaRespostaDTO>(`/tasks/${idTarefa}`)
+  const dados = resposta.data
+
+  const tarefa: Tarefa = {
+    id: dados.id,
+    listaId: dados.listaId,
+    nome: dados.nome,
+    descricao: dados.descricao ?? undefined,
+    prioridade: dados.prioridade,
+    dataPrevistaConclusao: dados.dataEsperadaDeConclusao,
+    concluidoEm: dados.concluidoEm,
+  }
+
+  return tarefa
+}
 
 export async function criarNovaTarefa(
-  dadosTarefa: CriarTarefaRequisicao
+  dadosTarefa: CriarTarefaRequisicao,
 ): Promise<Tarefa> {
   const resposta = await clienteApi.post<TarefaCriadaResposta>(
-    "/tasks",
-    dadosTarefa
-  );
+    '/tasks',
+    dadosTarefa,
+  )
 
-  const respostaData = resposta.data;
+  const respostaData = resposta.data
 
   const tarefaCriada: Tarefa = {
     id: respostaData.id,
@@ -109,9 +121,11 @@ export async function criarNovaTarefa(
     descricao: respostaData.descricao ?? undefined,
     prioridade: respostaData.prioridade,
     dataPrevistaConclusao: respostaData.dataConclusaoEsperada,
-  };
+    concluidoEm: respostaData.concluidoEm ?? undefined,
 
-  return tarefaCriada;
+  }
+
+  return tarefaCriada
 }
 
 
@@ -125,15 +139,15 @@ export async function criarNovaTarefa(
 
 export async function atualizarTarefaPorId(
   idTarefa: IdentificadorTarefa,
-  dadosAtualizacao: AtualizarTarefaRequisicao
+  dadosAtualizacao: AtualizarTarefaRequisicao,
 ): Promise<Tarefa> {
 
   const resposta = await clienteApi.put<TarefaRespostaDTO>(
     `/tasks/${idTarefa}`,
-    dadosAtualizacao
-  );
+    dadosAtualizacao,
+  )
 
-  const dados = resposta.data;
+  const dados = resposta.data
 
   const tarefaAtualizada: Tarefa = {
     id: dados.id,
@@ -142,15 +156,15 @@ export async function atualizarTarefaPorId(
     descricao: dados.descricao ?? undefined,
     prioridade: dados.prioridade,
     dataPrevistaConclusao: dados.dataEsperadaDeConclusao,
-    dataFinalizada: dados.dataConcluida,
-  };
+    concluidoEm: dados.concluidoEm,
+  }
 
-  return tarefaAtualizada;
+  return tarefaAtualizada
 }
 
 
 export async function deletarTarefaPorId(
-  idTarefa: IdentificadorTarefa
+  idTarefa: IdentificadorTarefa,
 ): Promise<void> {
-  await clienteApi.delete(`/tasks/${idTarefa}`);
+  await clienteApi.delete(`/tasks/${idTarefa}`)
 }

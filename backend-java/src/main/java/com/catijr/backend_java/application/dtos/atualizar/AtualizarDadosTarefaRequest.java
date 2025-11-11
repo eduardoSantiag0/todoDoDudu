@@ -10,7 +10,7 @@ public record AtualizarDadosTarefaRequest(
         Optional<String> descricao,
         Optional<EPrioridade> prioridade,
 //        Optional<LocalDate> dataFinalizada,
-        LocalDate dataFinalizada,
+        LocalDate concluidoEm,
         Optional<LocalDate> dataEsperadaDeConclusao,
         Optional<Long> listId
 ) {

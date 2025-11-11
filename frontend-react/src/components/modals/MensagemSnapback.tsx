@@ -1,5 +1,5 @@
 // src/components/MensagemSnapback.tsx
-import { BsCheckCircleFill, BsXLg } from "react-icons/bs";
+import { BsCheckCircleFill, BsXLg } from 'react-icons/bs'
 
 interface PropriedadesMensagemSnapback {
   mensagem: string;
@@ -60,5 +60,5 @@ export function MensagemSnapback({
         </button>
       </div>
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 // src/components/BotaoFinalizarTarefa.tsx
-import { BsCheck2 } from "react-icons/bs";
+import { BsCheck2 } from 'react-icons/bs'
 
 interface PropriedadesBotaoFinalizarTarefa {
   tarefaEstaFinalizada: boolean;
@@ -11,10 +11,10 @@ export function BotaoFinalizarTarefa({
   aoClicarBotao,
 }: PropriedadesBotaoFinalizarTarefa) {
   function lidarClique(
-    evento: React.MouseEvent<HTMLButtonElement>
+    evento: React.MouseEvent<HTMLButtonElement>,
   ) {
-    evento.stopPropagation();
-    aoClicarBotao();
+    evento.stopPropagation()
+    aoClicarBotao()
   }
 
   // ESTADO FINALIZADO
@@ -57,7 +57,7 @@ export function BotaoFinalizarTarefa({
           Finalizado
         </span>
       </button>
-    );
+    )
   }
 
   // ESTADO DEFAULT (não finalizada)
@@ -99,5 +99,5 @@ export function BotaoFinalizarTarefa({
         Finalizar
       </span>
     </button>
-  );
+  )
 }

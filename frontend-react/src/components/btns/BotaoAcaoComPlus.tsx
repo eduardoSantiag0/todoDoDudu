@@ -1,4 +1,4 @@
-import { BsFillPlusCircleFill } from "react-icons/bs";
+import { BsFillPlusCircleFill } from 'react-icons/bs'
 
 interface PropriedadesBotaoAcaoComPlus {
   aoClicar: () => void;
@@ -30,5 +30,5 @@ export function BotaoAcaoComPlus({ aoClicar, texto }: PropriedadesBotaoAcaoComPl
       {/* Texto dinâmico */}
       <span>{texto}</span>
     </button>
-  );
+  )
 }

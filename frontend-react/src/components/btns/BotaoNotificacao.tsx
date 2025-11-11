@@ -1,4 +1,4 @@
-import { BsBellFill } from "react-icons/bs";
+import { BsBellFill } from 'react-icons/bs'
 
 interface PropriedadesBotaoNotificacao {
   temNotificacao?: boolean;
@@ -10,11 +10,11 @@ export function BotaoNotificacao({
   aoClicar,
 }: PropriedadesBotaoNotificacao) {
   function lidarClique(
-    evento: React.MouseEvent<HTMLButtonElement>
+    evento: React.MouseEvent<HTMLButtonElement>,
   ) {
-    evento.stopPropagation();
+    evento.stopPropagation()
     if (aoClicar) {
-      aoClicar();
+      aoClicar()
     }
   }
 
@@ -50,5 +50,5 @@ export function BotaoNotificacao({
         />
       )}
     </button>
-  );
+  )
 }

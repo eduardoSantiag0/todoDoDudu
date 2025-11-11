@@ -9,7 +9,7 @@ public record TarefaCriadaResponse(
         String nome,
         String descricao,
         EPrioridade prioridade,
-        LocalDate dataConclusaoEsperada
-//        LocalDate concluidoEm
+        LocalDate dataConclusaoEsperada,
+        LocalDate concluidoEm
 ) {
 }

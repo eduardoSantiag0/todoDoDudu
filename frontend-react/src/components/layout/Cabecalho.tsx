@@ -1,6 +1,6 @@
-import { RiAccountCircleFill } from "react-icons/ri";
-import logoPeugeotTasks from "../../assets/765dc596f0cbc7a5cb63a9bc701bb5fcf6c6c278.png";
-import { BotaoNotificacao } from "../btns/BotaoNotificacao";
+import { RiAccountCircleFill } from 'react-icons/ri'
+import logoPeugeotTasks from '../../assets/765dc596f0cbc7a5cb63a9bc701bb5fcf6c6c278.png'
+import { BotaoNotificacao } from '../btns/BotaoNotificacao'
 
 interface PropriedadesCabecalhoAplicacao {
   temNotificacao?: boolean;
@@ -8,8 +8,8 @@ interface PropriedadesCabecalhoAplicacao {
 }
 
 export function CabecalhoAplicacao({
-  temNotificacao = false,            
-  aoCliqueNotificacao,               
+  temNotificacao = false,
+  aoCliqueNotificacao,
 }: PropriedadesCabecalhoAplicacao) {
   return (
     <header
@@ -74,7 +74,7 @@ export function CabecalhoAplicacao({
       </div>
 
       <div className="flex items-center gap-4">
-        <BotaoNotificacao 
+        <BotaoNotificacao
           temNotificacao={temNotificacao}
           aoClicar={aoCliqueNotificacao}
         />
@@ -110,5 +110,5 @@ export function CabecalhoAplicacao({
 
       </div>
     </header>
-  );
+  )
 }

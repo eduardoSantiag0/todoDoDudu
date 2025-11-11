@@ -1,8 +1,8 @@
-import type { ListId } from "./lista";
+import type { ListId } from './lista'
 
 export type IdentificadorTarefa = number;
 
-export type PrioridadeTarefa = "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH";
+export type PrioridadeTarefa = 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH';
 
 export interface Tarefa {
   id: IdentificadorTarefa;
@@ -11,5 +11,5 @@ export interface Tarefa {
   descricao?: string;
   prioridade: PrioridadeTarefa;
   dataPrevistaConclusao?: string;
-  dataFinalizada?: string | null;
+  concluidoEm?: string | null;
 }

@@ -68,7 +68,7 @@ public class TarefaService {
         return new TarefaCriadaResponse(novaTarefa.getId(),
                 novaTarefa.getLista().getId(), novaTarefa.getDescricao(),
                 novaTarefa.getDescricao(), novaTarefa.getPrioridade(),
-                novaTarefa.getDataConclusaoEsperada());
+                novaTarefa.getDataConclusaoEsperada(), novaTarefa.getConcluidaEm());
     }
 
 
@@ -113,7 +113,7 @@ public class TarefaService {
             tarefa.setLista(novaLista);
         }
 
-        tarefa.setConcluidaEm(dto.dataFinalizada());
+        tarefa.setConcluidaEm(dto.concluidoEm());
 
         TarefaEntity atualizada = tarefaRepository.save(tarefa);
 

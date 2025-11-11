@@ -1,5 +1,5 @@
 // src/components/BotaoOpcoesLista.tsx
-import { useState } from "react";
+import { useState } from 'react'
 
 interface PropriedadesBotaoOpcoesLista {
   aoClicarRenomearLista: () => void;
@@ -10,20 +10,20 @@ export function BotaoOpcoesLista({
   aoClicarRenomearLista,
   aoClicarExcluirLista,
 }: PropriedadesBotaoOpcoesLista) {
-  const [menuAberto, setMenuAberto] = useState(false);
+  const [menuAberto, setMenuAberto] = useState(false)
 
   function lidarCliqueBotao() {
-    setMenuAberto(!menuAberto);
+    setMenuAberto(!menuAberto)
   }
 
   function lidarCliqueRenomear() {
-    aoClicarRenomearLista();
-    setMenuAberto(false);
+    aoClicarRenomearLista()
+    setMenuAberto(false)
   }
 
   function lidarCliqueExcluir() {
-    aoClicarExcluirLista();
-    setMenuAberto(false);
+    aoClicarExcluirLista()
+    setMenuAberto(false)
   }
 
   return (
@@ -85,5 +85,5 @@ export function BotaoOpcoesLista({
         </div>
       )}
     </div>
-  );
+  )
 }

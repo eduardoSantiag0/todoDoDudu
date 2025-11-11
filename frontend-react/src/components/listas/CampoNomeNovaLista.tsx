@@ -10,8 +10,8 @@ export function CampoNomeNovaLista({
   aoConfirmarNomeLista,
 }: PropriedadesCampoNomeNovaLista) {
   function lidarPressionarTecla(evento: React.KeyboardEvent<HTMLInputElement>) {
-    if (evento.key === "Enter") {
-      aoConfirmarNomeLista();
+    if (evento.key === 'Enter') {
+      aoConfirmarNomeLista()
     }
   }
 
@@ -43,5 +43,5 @@ export function CampoNomeNovaLista({
         "
       />
     </div>
-  );
+  )
 }

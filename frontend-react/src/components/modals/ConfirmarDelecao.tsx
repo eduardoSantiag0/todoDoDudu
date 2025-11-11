@@ -1,8 +1,8 @@
-import { BsFillXCircleFill } from "react-icons/bs";
-import { AiFillDelete } from "react-icons/ai";
+import { BsFillXCircleFill } from 'react-icons/bs'
+import { AiFillDelete } from 'react-icons/ai'
 
 interface PropriedadesConfirmarDelecao {
-  tipo: "Lista" | "Tarefa";
+  tipo: 'Lista' | 'Tarefa';
   nome?: string;
   aoConfirmar: () => void;
   aoCancelar: () => void;
@@ -17,9 +17,12 @@ export function ConfirmarDelecao({
   return (
     <div
       className="
-        fixed inset-0 z-50 flex items-center justify-center
-        bg-black/50 
+        fixed inset-0 z-50
+        flex items-center justify-center
+        bg-black/50
+        pointer-events-auto
       "
+      onClick={aoCancelar}
     >
       <div
         className="
@@ -54,7 +57,7 @@ export function ConfirmarDelecao({
               "
             >
               Tem certeza que deseja deletar {tipo.toLowerCase()}
-              {nome ? ` “${nome}”?` : "?"}
+              {nome ? ` “${nome}”?` : '?'}
             </h2>
 
             <p
@@ -91,5 +94,5 @@ export function ConfirmarDelecao({
         </div>
       </div>
     </div>
-  );
+  )
 }
