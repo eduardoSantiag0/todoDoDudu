@@ -1,14 +1,14 @@
 import { BoardPage } from "./components/BoardPage"
+import { CabecalhoAplicacao } from "./components/header/Cabecalho"
 
 
 function App() {
-
-  // return (
-  //   <div className="min-h-screen bg-bg font-sans">
-  //     <p className="text-white">Boa sorte no projeto! <br /> - Menoni ❤️</p>
-  //   </div>
-  // )
-  return <BoardPage/>
+  return (
+    <div className="min-h-screen bg-background-main text-text-default font-poppins">
+      {/* <CabecalhoAplicacao /> */}
+      <BoardPage />
+    </div>
+  );
 }
 
 export default App

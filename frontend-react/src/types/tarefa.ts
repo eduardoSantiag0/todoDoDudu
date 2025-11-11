@@ -6,10 +6,10 @@ export type PrioridadeTarefa = "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH";
 
 export interface Tarefa {
   id: IdentificadorTarefa;
+  listaId: ListId;
   nome: string;
   descricao?: string;
   prioridade: PrioridadeTarefa;
   dataPrevistaConclusao?: string;
-  dataConclusao?: string | null;
-  listaId: ListId;
+  dataFinalizada?: string | null;
 }

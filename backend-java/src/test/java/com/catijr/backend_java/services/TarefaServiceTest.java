@@ -3,7 +3,7 @@ package com.catijr.backend_java.services;
 import com.catijr.backend_java.application.dtos.TarefaDTO;
 import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosTarefaRequest;
 import com.catijr.backend_java.application.dtos.criar.CriarTarefasRequest;
-import com.catijr.backend_java.application.errors.DataConclusaoDeveSerNoFuturoException;
+import com.catijr.backend_java.application.errors.DataInvalidaException;
 import com.catijr.backend_java.application.errors.ListaNaoEncontradaException;
 import com.catijr.backend_java.application.errors.TarefaNaoEncontradaException;
 import com.catijr.backend_java.infra.entities.EPrioridade;
@@ -170,7 +170,7 @@ class TarefaServiceTest {
                 Optional.of(1L)
         );
 
-        assertThrows(DataConclusaoDeveSerNoFuturoException.class,
+        assertThrows(DataInvalidaException.class,
                 () -> tarefaService.atualizarTarefaPorId(1L, tarefaComDataOntem));
     }
 

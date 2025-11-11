@@ -17,9 +17,9 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(DataConclusaoDeveSerNoFuturoException.class)
+    @ExceptionHandler(DataInvalidaException.class)
     public ResponseEntity<String> handleDataConclusaoDeveSerNoFuturoException
-            (DataConclusaoDeveSerNoFuturoException ex) {
+            (DataInvalidaException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());

@@ -6,6 +6,10 @@ import type {
   PrioridadeTarefa,
 } from "../types/tarefa";
 import { TaskCard } from "./CardsTarefas";
+import { BotaoOpcoesLista } from "./btns/BotaoOpcoesLista";
+import { ConfirmarDelecao } from "./popups/ConfirmarDelecao"; 
+import { BotaoAcaoComPlus } from "./btns/BotaoAcaoComPlus";
+
 
 interface PropriedadesColunaLista {
   idLista: ListId;
@@ -17,7 +21,7 @@ interface PropriedadesColunaLista {
     nome: string,
     descricao: string,
     prioridade: PrioridadeTarefa,
-    dataConclusao: string
+    dataConclusaoEsperada: string
   ) => void;
   aoDeletarTarefa: (idTarefa: IdentificadorTarefa) => void;
   aoMoverTarefaParaPosicao: (
@@ -27,6 +31,11 @@ interface PropriedadesColunaLista {
     indiceNovo: number
   ) => void;
   aoDeletarLista: (idLista: ListId) => void; 
+  aoAbrirDetalhesTarefa: (tarefa: Tarefa) => void;
+  aoAlternarFinalizacaoTarefa: (   
+    idTarefa: IdentificadorTarefa,
+    tarefaJaFinalizada: boolean
+  ) => void;
 }
 
 export function ColunaLista({
@@ -38,6 +47,8 @@ export function ColunaLista({
   aoDeletarTarefa,
   aoMoverTarefaParaPosicao,
   aoDeletarLista,
+  aoAbrirDetalhesTarefa,
+  aoAlternarFinalizacaoTarefa
 }: PropriedadesColunaLista) {
   const [criandoTarefa, setCriandoTarefa] = useState(false);
   const [novoNomeTarefa, setNovoNomeTarefa] = useState("");
@@ -51,6 +62,9 @@ export function ColunaLista({
   const [idListaOrigemArraste, setIdListaOrigemArraste] =
     useState<ListId | null>(null);
 
+  const [confirmacaoAberta, setConfirmacaoAberta] = useState(false);
+
+
   function lidarEnvioNovaTarefa(evento: React.FormEvent) {
     evento.preventDefault();
 
@@ -63,7 +77,7 @@ export function ColunaLista({
       novoNomeTarefa,
       novaDescricaoTarefa,
       novaPrioridadeTarefa,
-      novaDataTarefa
+      novaDataTarefa,
     );
 
     setNovoNomeTarefa("");
@@ -76,12 +90,21 @@ export function ColunaLista({
   function lidarInicioArraste(tarefa: Tarefa) {
     setIdTarefaSendoArrastada(tarefa.id);
     setIdListaOrigemArraste(tarefa.listaId);
+    console.log("Arrastando tarefa", tarefa.id, "da lista", tarefa.listaId);
+
   }
 
   function lidarSoltarNaPosicao(indicePosicao: number) {
     if (idTarefaSendoArrastada === null || idListaOrigemArraste === null) {
       return;
     }
+
+    console.log(
+      "✅ Soltando tarefa:",  idTarefaSendoArrastada, 
+      "de lista",  idListaOrigemArraste, 
+      "para lista",  idLista, 
+      "na posição",  indicePosicao
+    );
 
     aoMoverTarefaParaPosicao(
       idTarefaSendoArrastada,
@@ -104,19 +127,39 @@ export function ColunaLista({
     }
   }
 
-  function lidarCliqueDeletarLista() {
-    const desejaDeletar = window.confirm(
-      `Tem certeza que deseja deletar a lista "${nomeLista}"?`
-    );
+  // function lidarCliqueDeletarLista() {
+  //   const desejaDeletar = window.confirm(
+  //     `Tem certeza que deseja deletar a lista "${nomeLista}"?`
+  //   );
 
-    if (desejaDeletar) {
-      aoDeletarLista(idLista);
-    }
+  //   if (desejaDeletar) {
+  //     aoDeletarLista(idLista);
+  //   }
+  // }
+
+  function lidarCliqueDeletarLista() {
+    setConfirmacaoAberta(true); 
+  }
+
+  function confirmarDelecaoLista() {
+    aoDeletarLista(idLista);
+    setConfirmacaoAberta(false); 
   }
 
   return (
-    <section className="flex w-80 shrink-0 flex-col rounded-xl bg-background-secondary/60 p-3">
-      {/* CABEÇALHO DA LISTA */}
+    <section className="
+      box-border 
+      w-[477px]
+      min-h-[859px]
+      shrink-0 
+      flex-col 
+      rounded-xl     
+      bg-background-main  
+      p-3         
+      border border-[#4E4E4E]
+      px-4 pt-4 pb-6
+      gap-3 ">
+      
       <div className="mb-2 flex items-center justify-between gap-2">
         <button
           className="flex-1 text-sm font-semibold text-text-default text-left"
@@ -126,22 +169,52 @@ export function ColunaLista({
         </button>
 
         <div className="flex items-center gap-1">
-          <button
-            className="btn btn-secondary text-xs"
-            onClick={() => setCriandoTarefa(!criandoTarefa)}
-          >
-            + Tarefa
-          </button>
-
-          {/* BOTÃO VISÍVEL DE DELETAR LISTA */}
-          <button
-            className="px-2 py-1 text-xs rounded-lg border border-danger-background text-danger-background hover:bg-danger-background/20"
-            onClick={lidarCliqueDeletarLista}
-          >
-            🗑 Excluir
-          </button>
+          <BotaoOpcoesLista
+            aoClicarRenomearLista={lidarCliqueTituloLista}
+            aoClicarExcluirLista={lidarCliqueDeletarLista}
+          />
         </div>
       </div>
+      
+
+      {/* Zona de drop antes do primeiro card */}
+      <div
+        className="my-1 h-3 w-full rounded hover:bg-success-background/30"
+        onDragOver={(evento) => evento.preventDefault()}
+        onDrop={() => lidarSoltarNaPosicao(0)}
+      />
+
+      
+      {tarefasDaLista.map((tarefa, indice) => (
+        <div key={tarefa.id} >
+          <TaskCard
+            tarefa={tarefa}
+            aoDeletarTarefa={aoDeletarTarefa}
+            aoIniciarArrasteTarefa={lidarInicioArraste}
+            aoAbrirDetalhesTarefa={aoAbrirDetalhesTarefa}
+            aoAlternarFinalizacaoTarefa={aoAlternarFinalizacaoTarefa}
+          />
+          <div
+            className="my-1 h-3 w-full rounded hover:bg-success-background/30"
+            onDragOver={(evento) => evento.preventDefault()}
+            onDrop={() => lidarSoltarNaPosicao(indice + 1)}
+          />
+        </div>
+      ))}
+
+      {/* <button
+        type="button"
+        className="btn-criar-tarefa"
+        onClick={() => setCriandoTarefa(!criandoTarefa)}
+      >
+        + Nova tarefa
+      </button> */}
+
+      <BotaoAcaoComPlus
+        texto="Nova tarefa"
+        aoClicar={() => setCriandoTarefa(!criandoTarefa)}
+      />
+
 
       {criandoTarefa && (
         <form
@@ -216,27 +289,16 @@ export function ColunaLista({
         </form>
       )}
 
-      {/* Zona de drop antes do primeiro card */}
-      <div
-        className="my-1 h-3 w-full rounded hover:bg-success-background/30"
-        onDragOver={(evento) => evento.preventDefault()}
-        onDrop={() => lidarSoltarNaPosicao(0)}
-      />
+      {confirmacaoAberta && (
+        <ConfirmarDelecao
+          tipo="Lista"
+          nome={nomeLista}
+          aoConfirmar={confirmarDelecaoLista}
+          aoCancelar={() => setConfirmacaoAberta(false)}
+        />
+      )}
 
-      {tarefasDaLista.map((tarefa, indice) => (
-        <div key={tarefa.id}>
-          <TaskCard
-            tarefa={tarefa}
-            aoDeletarTarefa={aoDeletarTarefa}
-            aoIniciarArrasteTarefa={lidarInicioArraste}
-          />
-          <div
-            className="my-1 h-3 w-full rounded hover:bg-success-background/30"
-            onDragOver={(evento) => evento.preventDefault()}
-            onDrop={() => lidarSoltarNaPosicao(indice + 1)}
-          />
-        </div>
-      ))}
     </section>
+    
   );
 }

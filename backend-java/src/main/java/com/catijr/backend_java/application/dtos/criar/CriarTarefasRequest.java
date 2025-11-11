@@ -18,5 +18,5 @@ public record CriarTarefasRequest(
         EPrioridade prioridade,
 
         @NotNull
-        LocalDate dataConclusao
+        LocalDate dataConclusaoEsperada
 ) {}

@@ -30,6 +30,9 @@ public class TarefaEntity {
     @Column(name = "data_conclusao_esperada")
     private LocalDate dataConclusaoEsperada;
 
+    @Column(name = "concluida_em")
+    private LocalDate concluidaEm;
+
 
     public TarefaEntity() {
     }
@@ -49,7 +52,7 @@ public class TarefaEntity {
                 dto.nome(),
                 dto.descricao(),
                 dto.prioridade(),
-                dto.dataConclusao());
+                dto.dataConclusaoEsperada());
     }
 
     public Long getId() {
@@ -81,6 +84,10 @@ public class TarefaEntity {
         return dataConclusaoEsperada;
     }
 
+    public LocalDate getConcluidaEm() {
+        return concluidaEm;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -95,5 +102,13 @@ public class TarefaEntity {
 
     public void setDataConclusaoEsperada(LocalDate dataConclusaoEsperada) {
         this.dataConclusaoEsperada = dataConclusaoEsperada;
+    }
+
+    public void setLista(ListaEntity lista) {
+        this.lista = lista;
+    }
+
+    public void setConcluidaEm(LocalDate concluidaEm) {
+        this.concluidaEm = concluidaEm;
     }
 }

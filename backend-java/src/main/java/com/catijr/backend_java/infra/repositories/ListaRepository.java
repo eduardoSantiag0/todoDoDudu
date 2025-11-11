@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ListaRepository extends JpaRepository<ListaEntity, UUID> {
+public interface ListaRepository extends JpaRepository<ListaEntity, Long> {
 
     Optional<ListaEntity> findById(Long id);
 

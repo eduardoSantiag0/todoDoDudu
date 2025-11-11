@@ -4,7 +4,8 @@ package com.catijr.backend_java.services;
 import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosTarefaRequest;
 import com.catijr.backend_java.application.dtos.criar.CriarTarefasRequest;
 import com.catijr.backend_java.application.dtos.TarefaDTO;
-import com.catijr.backend_java.application.errors.DataConclusaoDeveSerNoFuturoException;
+import com.catijr.backend_java.application.dtos.response.TarefaCriadaResponse;
+import com.catijr.backend_java.application.errors.DataInvalidaException;
 import com.catijr.backend_java.application.errors.ListaNaoEncontradaException;
 import com.catijr.backend_java.application.errors.TarefaNaoEncontradaException;
 import com.catijr.backend_java.infra.entities.ListaEntity;
@@ -29,17 +30,33 @@ public class TarefaService {
         this.tarefaRepository = tarefaRepository;
     }
 
-    private void verificaNovaData (LocalDate dtoData) {
+    private void verificaDataEsperada(LocalDate dtoData) {
         if (dtoData.isBefore(LocalDate.now())) {
-            throw new DataConclusaoDeveSerNoFuturoException("Data de conclusão deve ser no futuro.");
+            throw new DataInvalidaException("Data de conclusão deve ser no futuro.");
         }
     }
 
 
-    @Transactional
-    public void criarTarefas(CriarTarefasRequest dto) {
+    public List<TarefaDTO> buscarTodasTarefas() {
+        return tarefaRepository.findAll()
+                .stream()
+                .map(tarefaEntidade -> new TarefaDTO(
+                        tarefaEntidade.getId(),
+                        tarefaEntidade.getLista().getId(),
+                        tarefaEntidade.getNome(),
+                        tarefaEntidade.getDescricao(),
+                        tarefaEntidade.getPrioridade(),
+                        tarefaEntidade.getDataConclusaoEsperada(),
+                        tarefaEntidade.getConcluidaEm()
+                ))
+                .toList();
+    }
 
-        verificaNovaData(dto.dataConclusao());
+
+    @Transactional
+    public TarefaCriadaResponse criarTarefas(CriarTarefasRequest dto) {
+
+        verificaDataEsperada(dto.dataConclusaoEsperada());
 
         ListaEntity lista = listaRepository.findById(dto.listaId())
                 .orElseThrow(() -> new ListaNaoEncontradaException("Lista não encontrada"));
@@ -47,6 +64,11 @@ public class TarefaService {
         TarefaEntity novaTarefa = TarefaEntity.of(dto, lista);
 
         tarefaRepository.save(novaTarefa);
+
+        return new TarefaCriadaResponse(novaTarefa.getId(),
+                novaTarefa.getLista().getId(), novaTarefa.getDescricao(),
+                novaTarefa.getDescricao(), novaTarefa.getPrioridade(),
+                novaTarefa.getDataConclusaoEsperada());
     }
 
 
@@ -80,13 +102,18 @@ public class TarefaService {
         if (dto.prioridade().isPresent()) {
             tarefa.setPrioridade(dto.prioridade().get());
         }
-        if (dto.dataConcluido().isPresent()) {
-            tarefa.setDataConclusaoEsperada(dto.dataConcluido().get());
-        }
         if (dto.dataEsperadaDeConclusao().isPresent()) {
-            verificaNovaData(dto.dataEsperadaDeConclusao().get());
+            verificaDataEsperada(dto.dataEsperadaDeConclusao().get());
             tarefa.setDataConclusaoEsperada(dto.dataEsperadaDeConclusao().get());
         }
+        if (dto.novaListaId().isPresent()) {
+            ListaEntity novaLista = listaRepository.findById(dto.novaListaId().get())
+                    .orElseThrow(() -> new ListaNaoEncontradaException("Lista não encontrada"));
+
+            tarefa.setLista(novaLista);
+        }
+
+        tarefa.setConcluidaEm(dto.dataFinalizada());
 
         TarefaEntity atualizada = tarefaRepository.save(tarefa);
 

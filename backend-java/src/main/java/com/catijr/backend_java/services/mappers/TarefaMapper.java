@@ -7,10 +7,13 @@ public class TarefaMapper {
 
     public static TarefaDTO toDTO(TarefaEntity entity) {
         return new TarefaDTO(
+                entity.getId(),
+                entity.getLista().getId(),
                 entity.getNome(),
                 entity.getDescricao(),
                 entity.getPrioridade(),
-                entity.getData()
+                entity.getData(),
+                entity.getConcluidaEm()
         );
     }
 }

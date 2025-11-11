@@ -1,6 +1,6 @@
 package com.catijr.backend_java.application.controllers;
 
-import com.catijr.backend_java.application.dtos.ListaCriadaResponse;
+import com.catijr.backend_java.application.dtos.response.ListaCriadaResponse;
 import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosListaRequest;
 import com.catijr.backend_java.application.dtos.criar.CriarListasRequest;
 import com.catijr.backend_java.application.dtos.ListaDTO;
