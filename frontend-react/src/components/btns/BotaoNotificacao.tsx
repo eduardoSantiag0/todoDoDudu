@@ -1,6 +1,6 @@
 import { BsBellFill } from 'react-icons/bs'
 
-interface PropriedadesBotaoNotificacao {
+interface BotaoNotificacaoProps {
   temNotificacao?: boolean;
   aoClicar?: () => void;
 }
@@ -8,7 +8,7 @@ interface PropriedadesBotaoNotificacao {
 export function BotaoNotificacao({
   temNotificacao = false,
   aoClicar,
-}: PropriedadesBotaoNotificacao) {
+}: BotaoNotificacaoProps) {
   function lidarClique(
     evento: React.MouseEvent<HTMLButtonElement>,
   ) {
@@ -23,26 +23,17 @@ export function BotaoNotificacao({
       type="button"
       onClick={lidarClique}
       className="
-        relative
-        flex items-center justify-center
-        w-8 h-[33px]
-        rounded-[2px]
-        p-1
-        text-text-default
-        transition-all duration-300 ease-out
-        hover:bg-button-create-task-hover
-        active:bg-button-notification-pressed
+        btn hover:bg-button-hover cursor-pointer
       "
     >
       <BsBellFill className="text-sm" />
 
-      {/* bolinha de notificação quando temNotificacao = true */}
       {temNotificacao && (
         <span
           className="
-            absolute
-            top-[4px] right-[4px]
+            top-0.5 right-1
             w-2 h-2
+            animate-ping
             rounded-full
             bg-danger-background
             ring-2 ring-background-main

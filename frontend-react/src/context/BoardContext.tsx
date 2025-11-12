@@ -1,318 +1,151 @@
 import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
+    createContext,
+    type ReactNode,
+    useContext,
+    useEffect,
+    useState,
 } from 'react'
 
-import type { Lista, ListId } from '../types/lista'
-import type {
-  Tarefa,
-  IdentificadorTarefa,
-  PrioridadeTarefa,
-} from '../types/tarefa'
-import type { AtualizarTarefaRequisicao } from '../queries/tarefasApi'
+import { buscarTodasAsListas } from '../queries/listasApi'
+import { buscarTodasAsTarefas } from '../queries/tarefasApi'
 
-import {
-  atualizarNomeLista,
-  buscarTodasAsListas,
-  criarNovaLista,
-  deletarListaPorId,
-} from '../queries/listasApi'
-import {
-  atualizarTarefaPorId,
-  buscarTodasAsTarefas,
-  criarNovaTarefa,
-  deletarTarefaPorId,
-} from '../queries/tarefasApi'
+import type { IdentificadorLista, Lista } from '../types/lista'
+import type { Tarefa } from '../types/tarefa'
 
-type TarefasPorLista = Record<ListId, Tarefa[]>
-
-type BoardContextValue = {
-  listas: Lista[]
-  tarefasPorListaId: TarefasPorLista
-  tarefaSelecionada: Tarefa | null
-  carregandoQuadro: boolean
-  mensagemErro: string | null
-  mensagemSnapback: string | null
-  temNotificacao: boolean
-
-  tarefasDaLista: (id: ListId) => Tarefa[]
-
-  criarLista: (nome: string) => Promise<void>
-  renomearLista: (id: ListId, nome: string) => Promise<void>
-  deletarLista: (id: ListId) => Promise<void>
-
-  criarTarefa: (
-    idLista: ListId,
-    nome: string,
-    descricao: string,
-    prioridade: PrioridadeTarefa,
-    dataConclusaoEsperada: string
-  ) => Promise<void>
-
-  deletarTarefa: (idTarefa: IdentificadorTarefa) => Promise<void>
-  atualizarTarefa: (idTarefa: IdentificadorTarefa, dados: AtualizarTarefaRequisicao) => Promise<void>
-  alternarFinalizacaoTarefa: (idTarefa: IdentificadorTarefa, jaFinalizada: boolean) => Promise<void>
-  moverTarefaEntreListas: (idTarefa: IdentificadorTarefa, origem: ListId, destino: ListId) => Promise<void>
-
-  abrirDetalhes: (t: Tarefa) => void
-  fecharDetalhes: () => void
-  marcarNotificacaoVista: () => void
-  fecharSnapback: () => void
-}
+import type { BoardContextValue } from './board/boardTypes'
+import { agruparTarefasPorLista } from './board/boardUtils'
+import { criarAcoesDeLista } from './board/listActions'
+import { criarAcoesDeTarefa } from './board/taskActions'
+import { selecionarTarefasDaLista } from './board/selectors'
+import type { TarefasPorLista } from './board/boardTypes'
 
 const BoardContext = createContext<BoardContextValue | null>(null)
 
 export function useBoard() {
-  const ctx = useContext(BoardContext)
-  if (!ctx) throw new Error('useBoard deve ser usado dentro de <BoardProvider>')
-  return ctx
+    const ctx = useContext(BoardContext)
+    if (!ctx)
+        {throw new Error('useBoard deve ser usado dentro de <BoardProvider>')}
+    return ctx
 }
 
 export function BoardProvider({ children }: { children: ReactNode }) {
-  const [listas, setListas] = useState<Lista[]>([])
-  const [tarefasPorListaId, setTarefasPorListaId] = useState<TarefasPorLista>({})
-  const [carregandoQuadro, setCarregandoQuadro] = useState(true)
-  const [mensagemErro, setMensagemErro] = useState<string | null>(null)
-  const [mensagemSnapback, setMensagemSnapback] = useState<string | null>(null)
-  const [temNotificacao, setTemNotificacao] = useState(false)
-  const [tarefaSelecionada, setTarefaSelecionada] = useState<Tarefa | null>(null)
+    // --- Estado base
+    const [listas, setListas] = useState<Lista[]>([])
+    const [tarefasPorListaId, setTarefasPorListaId] = useState<TarefasPorLista>(
+        {},
+    )
+    const [carregandoQuadro, setCarregandoQuadro] = useState(true)
+    const [mensagemErro, setMensagemErro] = useState<string | null>(null)
+    const [mensagemSnapback, setMensagemSnapback] = useState<string | null>(
+        null,
+    )
+    const [temNotificacao, setTemNotificacao] = useState(false)
+    const [tarefaSelecionada, setTarefaSelecionada] = useState<Tarefa | null>(
+        null,
+    )
 
-  function mostrarSnapback(msg: string) {
-    setMensagemSnapback(msg)
-    setTimeout(() => setMensagemSnapback(null), 3000)
-  }
-
-  async function carregarDadosQuadro() {
-    try {
-      setCarregandoQuadro(true)
-      setMensagemErro(null)
-
-      const [listasBuscadas, tarefasBuscadas] = await Promise.all([
-        buscarTodasAsListas(),
-        buscarTodasAsTarefas(),
-      ])
-
-      const mapa: TarefasPorLista = {}
-      listasBuscadas.forEach((l) => (mapa[l.id] = []))
-      tarefasBuscadas.forEach((t) => {
-        const lid = t.listaId as ListId
-        if (!mapa[lid]) mapa[lid] = []
-        mapa[lid].push(t)
-      })
-
-      setListas(listasBuscadas)
-      setTarefasPorListaId(mapa)
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Não foi possível carregar o quadro.')
-    } finally {
-      setCarregandoQuadro(false)
+    // --- Helpers UI
+    function exibirMensagemSnapback(msg: string) {
+        setMensagemSnapback(msg)
+        setTimeout(() => setMensagemSnapback(null), 3000)
     }
-  }
 
-  useEffect(() => {
-    void carregarDadosQuadro()
-  }, [])
-
-  function tarefasDaLista(id: ListId) {
-    return tarefasPorListaId[id] ?? []
-  }
-
-  // ---- Listas
-  async function criarLista(nome: string) {
-    const n = nome.trim()
-    if (!n) return
-    try {
-      const nova = await criarNovaLista(n)
-      setListas((prev) => [...prev, nova])
-      setTarefasPorListaId((m) => ({ ...m, [nova.id]: [] }))
-      mostrarSnapback('Lista criada!')
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao criar lista.')
+    // --- Carga inicial
+    async function carregarQuadro() {
+        try {
+            setCarregandoQuadro(true)
+            setMensagemErro(null)
+            const [listasBuscadas, tarefasBuscadas] = await Promise.all([
+                buscarTodasAsListas(),
+                buscarTodasAsTarefas(),
+            ])
+            setListas(listasBuscadas)
+            setTarefasPorListaId(
+                agruparTarefasPorLista(listasBuscadas, tarefasBuscadas),
+            )
+        } catch (e) {
+            console.error(e)
+            setMensagemErro('Não foi possível carregar o quadro.')
+        } finally {
+            setCarregandoQuadro(false)
+        }
     }
-  }
 
-  async function renomearLista(id: ListId, nome: string) {
-    try {
-      const atual = await atualizarNomeLista(id, nome)
-      setListas((prev) => prev.map((l) => (l.id === id ? atual : l)))
-      mostrarSnapback('Lista renomeada!')
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao renomear lista.')
-    }
-  }
+    useEffect(() => {
+        void carregarQuadro()
+    }, [])
 
-  async function deletarLista(id: ListId) {
-    try {
-      await deletarListaPorId(id)
-      setListas((prev) => prev.filter((l) => l.id !== id))
-      setTarefasPorListaId((m) => {
-        const novo = { ...m }
-        delete novo[id]
-        return novo
-      })
-      mostrarSnapback('Lista deletada com sucesso!')
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao deletar lista.')
-    }
-  }
-
-  // ---- Tarefas
-  async function criarTarefa(
-    idLista: ListId,
-    nome: string,
-    descricao: string,
-    prioridade: PrioridadeTarefa,
-    dataConclusaoEsperada: string
-  ) {
-    if (!dataConclusaoEsperada) {
-      alert('Escolha uma data de conclusão para a tarefa.')
-      return
-    }
-    try {
-      const criada = await criarNovaTarefa({
-        listaId: idLista,
-        nome,
-        descricao: descricao || undefined,
-        prioridade,
-        dataConclusaoEsperada,
-      })
-      setTarefasPorListaId((m) => ({
-        ...m,
-        [idLista]: [...(m[idLista] ?? []), criada],
-      }))
-      setTemNotificacao(true)
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao criar tarefa.')
-    }
-  }
-
-  async function deletarTarefa(idTarefa: IdentificadorTarefa) {
-    try {
-      await deletarTarefaPorId(idTarefa)
-      setTarefasPorListaId((m) => {
-        const novo: TarefasPorLista = {}
-        Object.entries(m).forEach(([k, lista]) => {
-          const lid = Number(k) as ListId
-          novo[lid] = lista.filter((t) => t.id !== idTarefa)
-        })
-        return novo
-      })
-      if (tarefaSelecionada?.id === idTarefa) setTarefaSelecionada(null)
-      mostrarSnapback('Tarefa deletada com sucesso!')
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao deletar tarefa.')
-    }
-  }
-
-  async function atualizarTarefa(idTarefa: IdentificadorTarefa, dados: AtualizarTarefaRequisicao) {
-    try {
-      const atualizada = await atualizarTarefaPorId(idTarefa, dados)
-      setTarefasPorListaId((m) => {
-        const novo: TarefasPorLista = {}
-        const destino = atualizada.listaId as ListId
-
-        Object.entries(m).forEach(([k, lista]) => {
-          const lid = Number(k) as ListId
-          novo[lid] = lista.filter((t) => t.id !== idTarefa)
-        })
-        novo[destino] = [...(novo[destino] ?? []), atualizada]
-        return novo
-      })
-      setTarefaSelecionada((sel) => (sel?.id === idTarefa ? atualizada : sel))
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao atualizar tarefa.')
-    }
-  }
-
-  async function alternarFinalizacaoTarefa(idTarefa: IdentificadorTarefa, jaFinalizada: boolean) {
-    try {
-      const concluidoEm = jaFinalizada ? null : new Date().toISOString().slice(0, 10)
-      const atualizada = await atualizarTarefaPorId(idTarefa, { concluidoEm })
-
-      setTarefasPorListaId((m) => {
-        const novo: TarefasPorLista = {}
-        Object.entries(m).forEach(([k, lista]) => {
-          const lid = Number(k) as ListId
-          novo[lid] = lista.map((t) => (t.id === idTarefa ? atualizada : t))
-        })
-        return novo
-      })
-      setTarefaSelecionada((sel) => (sel?.id === idTarefa ? atualizada : sel))
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao atualizar finalização da tarefa.')
-    }
-  }
-
-  async function moverTarefaEntreListas(idTarefa: IdentificadorTarefa, origem: ListId, destino: ListId) {
-    if (origem === destino) return
-
-    // otimista
-    setTarefasPorListaId((m) => {
-      const novo: TarefasPorLista = {}
-      Object.entries(m).forEach(([k, lista]) => {
-        novo[Number(k) as ListId] = [...lista]
-      })
-      const origemArr = novo[origem] ?? []
-      const idx = origemArr.findIndex((t) => t.id === idTarefa)
-      if (idx === -1) return m
-      const [movida] = origemArr.splice(idx, 1)
-      novo[origem] = origemArr
-      novo[destino] = [...(novo[destino] ?? []), { ...movida, listaId: destino }]
-      return novo
+    // --- Ações (divididas por domínio)
+    const { criarLista, renomearLista, deletarLista } = criarAcoesDeLista({
+        setListas,
+        setTarefasPorListaId,
+        exibirMensagem: exibirMensagemSnapback,
+        setErro: setMensagemErro,
     })
 
-    try {
-      await atualizarTarefaPorId(idTarefa, { novaListaId: destino })
-    } catch (e) {
-      console.error(e)
-      setMensagemErro('Erro ao mover tarefa entre listas. Recarregando quadro.')
-      await carregarDadosQuadro()
+    const {
+        criarTarefa,
+        deletarTarefa,
+        atualizarTarefa,
+        alternarFinalizacaoTarefa,
+        moverTarefaEntreListas,
+    } = criarAcoesDeTarefa({
+        setMapa: setTarefasPorListaId,
+        setSelecionada: setTarefaSelecionada,
+        setNotificacao: setTemNotificacao,
+        setErro: setMensagemErro,
+        exibirMensagem: exibirMensagemSnapback,
+        recarregarQuadro: carregarQuadro,
+        getListas: () => listas,
+    })
+
+    // --- Seletores expostos com mesma API
+    function tarefasDaLista(id: IdentificadorLista) {
+        return selecionarTarefasDaLista(tarefasPorListaId, id)
     }
-  }
 
-  // UI helpers
-  function abrirDetalhes(t: Tarefa) { setTarefaSelecionada(t) }
-  function fecharDetalhes() { setTarefaSelecionada(null) }
-  function marcarNotificacaoVista() { setTemNotificacao(false) }
-  function fecharSnapback() { setMensagemSnapback(null) }
+    // --- UI helpers expostos
+    function abrirDetalhes(t: Tarefa) {
+        setTarefaSelecionada(t)
+    }
+    function fecharDetalhes() {
+        setTarefaSelecionada(null)
+    }
+    function marcarNotificacaoVista() {
+        setTemNotificacao(false)
+    }
+    function fecharSnapback() {
+        setMensagemSnapback(null)
+    }
 
-  const value: BoardContextValue = {
-    listas,
-    tarefasPorListaId,
-    tarefaSelecionada,
-    carregandoQuadro,
-    mensagemErro,
-    mensagemSnapback,
-    temNotificacao,
+    const value: BoardContextValue = {
+        listas,
+        tarefasPorListaId,
+        tarefaSelecionada,
+        carregandoQuadro,
+        mensagemErro,
+        mensagemSnapback,
+        temNotificacao,
 
-    tarefasDaLista,
+        tarefasDaLista,
 
-    criarLista,
-    renomearLista,
-    deletarLista,
+        criarLista,
+        renomearLista,
+        deletarLista,
 
-    criarTarefa,
-    deletarTarefa,
-    atualizarTarefa,
-    alternarFinalizacaoTarefa,
-    moverTarefaEntreListas,
+        criarTarefa,
+        deletarTarefa,
+        atualizarTarefa,
+        alternarFinalizacaoTarefa,
+        moverTarefaEntreListas,
 
-    abrirDetalhes,
-    fecharDetalhes,
-    marcarNotificacaoVista,
-    fecharSnapback,
-  }
+        abrirDetalhes,
+        fecharDetalhes,
+        marcarNotificacaoVista,
+        fecharSnapback,
+    }
 
-  return <BoardContext.Provider value={value}>{children}</BoardContext.Provider>
+    return (
+        <BoardContext.Provider value={value}>{children}</BoardContext.Provider>
+    )
 }

@@ -1,4 +1,4 @@
-interface PropriedadesCampoNomeNovaLista {
+interface CampoNomeNovaListaProps {
   valorNomeLista: string;
   aoAlterarNomeLista: (novoNome: string) => void;
   aoConfirmarNomeLista: () => void;
@@ -8,7 +8,7 @@ export function CampoNomeNovaLista({
   valorNomeLista,
   aoAlterarNomeLista,
   aoConfirmarNomeLista,
-}: PropriedadesCampoNomeNovaLista) {
+}: CampoNomeNovaListaProps) {
   function lidarPressionarTecla(evento: React.KeyboardEvent<HTMLInputElement>) {
     if (evento.key === 'Enter') {
       aoConfirmarNomeLista()
@@ -21,7 +21,6 @@ export function CampoNomeNovaLista({
         flex flex-row items-center justify-center
         w-[300px] h-[45px]
         rounded-xl
-        border border-white
         p-2
         gap-2.5
       "
@@ -33,13 +32,10 @@ export function CampoNomeNovaLista({
         onKeyDown={lidarPressionarTecla}
         className="
           w-[284px] h-[29px]
-          bg-transparent
-          outline-none
-          font-poppins
           text-[19.2px]
-          leading-[29px]
           font-normal
-          text-white
+          transition-colors  duration-200
+          input
         "
       />
     </div>

@@ -1,7 +1,7 @@
 // src/components/BotaoOpcoesLista.tsx
 import { useState } from 'react'
 
-interface PropriedadesBotaoOpcoesLista {
+interface BotaoOpcoesLista {
   aoClicarRenomearLista: () => void;
   aoClicarExcluirLista: () => void;
 }
@@ -9,7 +9,7 @@ interface PropriedadesBotaoOpcoesLista {
 export function BotaoOpcoesLista({
   aoClicarRenomearLista,
   aoClicarExcluirLista,
-}: PropriedadesBotaoOpcoesLista) {
+}: BotaoOpcoesLista) {
   const [menuAberto, setMenuAberto] = useState(false)
 
   function lidarCliqueBotao() {
@@ -28,7 +28,7 @@ export function BotaoOpcoesLista({
 
   return (
     <div className="relative">
-      {/* Botão de três pontinhos */}
+
       <button
         type="button"
         onClick={lidarCliqueBotao}
@@ -37,8 +37,9 @@ export function BotaoOpcoesLista({
           w-8 h-8
           rounded-lg
           text-text-default
-          hover:bg-background-secondary/80
+          hover:bg-button-hover
           transition-all duration-200 ease-out
+          active: bg-button-notification-pressed
         "
       >
         <span className="text-xl leading-none">⋯</span>
@@ -64,7 +65,7 @@ export function BotaoOpcoesLista({
               w-full px-3 py-2
               text-left text-xs
               text-text-default
-              hover:bg-background-secondary/60
+              hover:bg-button-hover
             "
           >
             Renomear lista

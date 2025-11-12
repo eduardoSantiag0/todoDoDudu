@@ -56,7 +56,7 @@ public class TarefaService {
     @Transactional
     public TarefaCriadaResponse criarTarefas(CriarTarefasRequest dto) {
 
-        verificaDataEsperada(dto.dataConclusaoEsperada());
+        verificaDataEsperada(dto.dataEsperadaDeConclusao());
 
         ListaEntity lista = listaRepository.findById(dto.listaId())
                 .orElseThrow(() -> new ListaNaoEncontradaException("Lista não encontrada"));
@@ -66,7 +66,7 @@ public class TarefaService {
         tarefaRepository.save(novaTarefa);
 
         return new TarefaCriadaResponse(novaTarefa.getId(),
-                novaTarefa.getLista().getId(), novaTarefa.getDescricao(),
+                novaTarefa.getLista().getId(), novaTarefa.getNome(),
                 novaTarefa.getDescricao(), novaTarefa.getPrioridade(),
                 novaTarefa.getDataConclusaoEsperada(), novaTarefa.getConcluidaEm());
     }

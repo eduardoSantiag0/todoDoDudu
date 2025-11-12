@@ -141,10 +141,11 @@ class TarefaServiceTest {
         when(tarefaRepository.findById(1L)).thenReturn(Optional.of(tarefa));
 
         AtualizarDadosTarefaRequest request = new AtualizarDadosTarefaRequest(
-                Optional.of("Novo nome"),
+                Optional.empty(),
+                Optional.of(novoNome),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.empty(),
+                null,
                 Optional.empty(),
                 Optional.of(1L)
         );
@@ -166,6 +167,7 @@ class TarefaServiceTest {
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
+                null,
                 Optional.of(LocalDate.now().minusDays(1)),
                 Optional.of(1L)
         );

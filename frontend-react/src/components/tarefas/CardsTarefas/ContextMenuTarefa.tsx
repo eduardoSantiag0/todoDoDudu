@@ -26,15 +26,15 @@ export function ContextMenuTarefa({
 }: ContextMenuTarefaProps) {
   // Fecha com Esc (opcional)
   useEffect(() => {
-    if (!visivel) return
+    if (!visivel) {return}
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') aoFechar()
+      if (e.key === 'Escape') {aoFechar()}
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [visivel, aoFechar])
 
-  if (!visivel || !posicao) return null
+  if (!visivel || !posicao) {return null}
 
   return (
     <>
@@ -52,8 +52,8 @@ export function ContextMenuTarefa({
           fixed z-50
           flex flex-col items-start
           bg-background-main
-          border border-[#4E4E4E]
-          rounded
+          border border-button-hover
+          rounded-lg
           w-[109px]
           py-2 px-[1px]
         "
@@ -61,12 +61,11 @@ export function ContextMenuTarefa({
         role="menu"
         onPointerDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
-        onContextMenu={(e) => e.preventDefault()} /* evita menu nativo dentro do menu */
+        onContextMenu={(e) => e.preventDefault()}
       >
         {/* Editar */}
         <button
           type="button"
-          role="menuitem"
           className="
             flex flex-row items-center gap-2
             w-[107px] h-10
@@ -76,8 +75,8 @@ export function ContextMenuTarefa({
           "
           onClick={() => { aoEditar(); aoFechar() }}
         >
-          <BsPencilFill className="w-4 h-4 text-white" />
-          <span className="text-[16px] leading-6 font-normal font-poppins text-white">
+          <BsPencilFill className="w-4 h-4" />
+          <span className="text-[16px] leading-6 font-normal">
             Editar
           </span>
         </button>
@@ -85,7 +84,6 @@ export function ContextMenuTarefa({
         {/* Duplicar */}
         <button
           type="button"
-          role="menuitem"
           className="
             flex flex-row items-center gap-2
             w-[107px] h-10
@@ -95,8 +93,8 @@ export function ContextMenuTarefa({
           "
           onClick={() => { aoDuplicar(); aoFechar() }}
         >
-          <BsPlusSquareDotted className="w-4 h-4 text-white" />
-          <span className="text-[16px] leading-6 font-normal font-poppins text-white">
+          <BsPlusSquareDotted className="w-4 h-4 " />
+          <span className="text-[16px] leading-6 font-normal  ">
             Duplicar
           </span>
         </button>
@@ -104,18 +102,17 @@ export function ContextMenuTarefa({
         {/* Deletar */}
         <button
           type="button"
-          role="menuitem"
           className="
             flex flex-row items-center gap-2
             w-[107px] h-10
             px-2 py-2
             bg-background-main
-            hover:bg-background-secondary/70
+            hover:bg-button-hover
           "
           onClick={() => { aoDeletar(); aoFechar() }}
         >
           <AiFillDelete className="w-4 h-4 text-danger-background" />
-          <span className="text-[16px] leading-6 font-normal font-poppins text-danger-background">
+          <span className="text-[16px] leading-6 font-normal  text-danger-background">
             Deletar
           </span>
         </button>

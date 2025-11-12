@@ -52,7 +52,7 @@ public class TarefaEntity {
                 dto.nome(),
                 dto.descricao(),
                 dto.prioridade(),
-                dto.dataConclusaoEsperada());
+                dto.dataEsperadaDeConclusao());
     }
 
     public Long getId() {

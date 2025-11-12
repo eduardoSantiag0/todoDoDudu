@@ -1,5 +1,5 @@
 import { clienteApi } from './clienteApi'
-import type { Lista, ListId } from '../types/lista'
+import type { IdentificadorLista, Lista } from '../types/lista'
 import type { Tarefa } from '../types/tarefa'
 
 export interface ListaComTarefas extends Lista {
@@ -30,6 +30,6 @@ export async function atualizarNomeLista(
   return resposta.data as Lista
 }
 
-export async function deletarListaPorId(idLista: ListId): Promise<void> {
+export async function deletarListaPorId(idLista: IdentificadorLista): Promise<void> {
   await clienteApi.delete(`/lists/${idLista}`)
 }

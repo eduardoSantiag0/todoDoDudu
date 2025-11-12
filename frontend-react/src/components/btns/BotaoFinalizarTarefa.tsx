@@ -1,7 +1,7 @@
 // src/components/BotaoFinalizarTarefa.tsx
 import { BsCheck2 } from 'react-icons/bs'
 
-interface PropriedadesBotaoFinalizarTarefa {
+interface BotaoFinalizarTarefaProps {
   tarefaEstaFinalizada: boolean;
   aoClicarBotao: () => void;
 }
@@ -9,7 +9,7 @@ interface PropriedadesBotaoFinalizarTarefa {
 export function BotaoFinalizarTarefa({
   tarefaEstaFinalizada,
   aoClicarBotao,
-}: PropriedadesBotaoFinalizarTarefa) {
+}: BotaoFinalizarTarefaProps) {
   function lidarClique(
     evento: React.MouseEvent<HTMLButtonElement>,
   ) {
@@ -29,7 +29,8 @@ export function BotaoFinalizarTarefa({
           rounded-[12px]
           p-1 gap-2
           transition-all duration-300 ease-out
-          hover:bg-background-secondary/40
+          hover:bg-button-hover
+          btn-ghost
         "
       >
         {/* círculo externo 32x32 com borda tracejada verde */}
@@ -71,7 +72,7 @@ export function BotaoFinalizarTarefa({
         rounded-[12px]
         p-1 gap-2
         transition-all duration-300 ease-out
-        hover:bg-background-secondary/40
+        hover:bg-button-hover
       "
     >
       {/* círculo 32x32 com borda pontilhada BRANCA e ícone BsCheck2 branco */}
@@ -86,13 +87,11 @@ export function BotaoFinalizarTarefa({
         <BsCheck2 className="text-text-default text-base" />
       </span>
 
-      {/* texto Finalizar em verde da prioridade baixa (sem fundo) */}
       <span
         className="
           text-[16px]
           leading-[100%]
           font-normal
-          font-poppins
           text-text-default text-base
         "
       >

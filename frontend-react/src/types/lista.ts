@@ -1,6 +1,6 @@
-export type ListId = number;
+export type IdentificadorLista= number;
 
 export interface Lista {
-  id: ListId;
+  id: IdentificadorLista
   nome: string;
 }

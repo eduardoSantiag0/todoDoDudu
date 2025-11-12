@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { BsCaretDownFill } from 'react-icons/bs'
-import type { PrioridadeTarefa } from '../../../../types/tarefa'
+import { PrioridadeTarefa } from '../../../../types/tarefa'
 
-interface PropriedadesDropdownPrioridade {
+interface DropdownPrioridadeProps {
     prioridadeSelecionada: PrioridadeTarefa;
     aoSelecionarPrioridade: (nova: PrioridadeTarefa) => void;
 }
@@ -10,7 +10,7 @@ interface PropriedadesDropdownPrioridade {
 export function DropdownPrioridade({
     prioridadeSelecionada,
     aoSelecionarPrioridade,
-}: PropriedadesDropdownPrioridade) {
+}: DropdownPrioridadeProps) {
     const [aberto, setAberto] = useState(false)
 
     const opcoes: {
@@ -20,25 +20,25 @@ export function DropdownPrioridade({
         text: string;
     }[] = [
         {
-            tipo: 'LOW',
+            tipo: PrioridadeTarefa.LOW,
             nome: 'Baixa Prioridade',
             bg: 'bg-priority-low-background',
             text: 'text-priority-low-text',
         },
         {
-            tipo: 'MEDIUM',
+            tipo: PrioridadeTarefa.MEDIUM,
             nome: 'Média Prioridade',
             bg: 'bg-priority-medium-background',
             text: 'text-priority-medium-text',
         },
         {
-            tipo: 'HIGH',
+            tipo: PrioridadeTarefa.HIGH,
             nome: 'Alta Prioridade',
             bg: 'bg-priority-high-background',
             text: 'text-priority-high-text',
         },
         {
-            tipo: 'VERY_HIGH',
+            tipo: PrioridadeTarefa.VERY_HIGH,
             nome: 'Altíssima Prioridade',
             bg: 'bg-priority-very-high-background',
             text: 'text-priority-very-high-text',

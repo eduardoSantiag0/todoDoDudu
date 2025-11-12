@@ -2,7 +2,7 @@ import { RiAccountCircleFill } from 'react-icons/ri'
 import logoPeugeotTasks from '../../assets/765dc596f0cbc7a5cb63a9bc701bb5fcf6c6c278.png'
 import { BotaoNotificacao } from '../btns/BotaoNotificacao'
 
-interface PropriedadesCabecalhoAplicacao {
+interface CabecalhoAplicacaoProps {
   temNotificacao?: boolean;
   aoCliqueNotificacao?: () => void;
 }
@@ -10,70 +10,34 @@ interface PropriedadesCabecalhoAplicacao {
 export function CabecalhoAplicacao({
   temNotificacao = false,
   aoCliqueNotificacao,
-}: PropriedadesCabecalhoAplicacao) {
+}: CabecalhoAplicacaoProps) {
   return (
     <header
       className="
+        sticky top-0 z-40
         flex items-center justify-between
-        h-[84px] w-full
-        px-20 py-3
-        border-b border-button-create-task-hover
-        bg-linear-to-r
-        from-background-secondary/30
-        to-background-main/30
-        backdrop-blur-[80px]
+        h-[75px] md:h-[84px] w-full
+        px-4 md:px-8 lg:px-20
+        border-b border-button-hover
+        header-grad-custom
+        backdrop-blur-md md:backdrop-blur-[80px]
       "
     >
-      {/* Lado esquerdo: logo + nome Peugeot Tasks */}
-      <div
-        className="
-          flex items-center gap-1
-          w-[128px] h-[60px]
-        "
-      >
-        {/* Logo */}
+      {/* Esquerda: logo + marca */}
+      <div className="flex items-center gap-2 md:gap-1">
         <img
           src={logoPeugeotTasks}
           alt="Logo Peugeot Tasks"
-          className="
-            w-[54.668px] h-[60px]
-            object-contain
-          "
+          className="w-10 h-10 md:w-[54.668px] md:h-[60px] object-contain"
         />
-
-        {/* Textos Peugeot / Tasks */}
-        <div
-          className="
-            flex flex-col justify-center
-            w-[68px] h-[44px]
-          "
-        >
-          <span
-            className="
-              text-[16px]
-              leading-[100%]
-              font-semibold
-              font-poppins
-              text-text-default
-            "
-          >
-            Peugeot
-          </span>
-          <span
-            className="
-              text-[16px]
-              leading-[100%]
-              font-semibold
-              font-poppins
-              text-text-default
-            "
-          >
-            Tasks
-          </span>
+        <div className="flex flex-col justify-center leading-none">
+          <span className="text-sm md:text-base font-semibold">Peugeot</span>
+          <span className="text-sm md:text-base font-semibold -mt-1 md:mt-0">Tasks</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      {/* Notificação + perfil  */}
+      <div className="flex items-center gap-3">
         <BotaoNotificacao
           temNotificacao={temNotificacao}
           aoClicar={aoCliqueNotificacao}
@@ -82,32 +46,25 @@ export function CabecalhoAplicacao({
         <button
           type="button"
           className="
-            flex items-center
-            w-[128px] h-9
-            rounded-[12px]
-            px-4 py-1
-            gap-2
-            bg-profile-button-background
-            text-white
-            transition-all duration-300 ease-out
-            hover:bg-button-create-task-hover
-            hover:text-text-default
+            flex md:hidden items-center justify-center
+            w-9 h-9 rounded-md
+            btn-transition hover:bg-button-hover
+          "
+        >
+          <RiAccountCircleFill className="text-xl" />
+        </button>
+
+        <button
+          type="button"
+          className="
+            hidden md:flex items-center
+            h-9 rounded-xl px-4 gap-2
+            btn-transition hover:bg-button-hover
           "
         >
           <RiAccountCircleFill className="text-2xl" />
-
-          <span
-            className="
-              text-[16px]
-              leading-[100%]
-              font-semibold
-              font-poppins
-            "
-          >
-            José
-          </span>
+          <span className="text-sm md:text-base font-semibold ">Dudu</span>
         </button>
-
       </div>
     </header>
   )

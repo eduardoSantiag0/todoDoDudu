@@ -1,7 +1,7 @@
 // src/components/MensagemSnapback.tsx
 import { BsCheckCircleFill, BsXLg } from 'react-icons/bs'
 
-interface PropriedadesMensagemSnapback {
+interface MensagemSnapbackProps {
   mensagem: string;
   aoFecharMensagem: () => void;
 }
@@ -9,7 +9,7 @@ interface PropriedadesMensagemSnapback {
 export function MensagemSnapback({
   mensagem,
   aoFecharMensagem,
-}: PropriedadesMensagemSnapback) {
+}: MensagemSnapbackProps) {
   return (
     <div className="fixed left-1/2 top-6 z-30 -translate-x-1/2">
       <div
@@ -43,7 +43,6 @@ export function MensagemSnapback({
           </span>
         </div>
 
-        {/* Botão de fechar */}
         <button
           type="button"
           onClick={aoFecharMensagem}

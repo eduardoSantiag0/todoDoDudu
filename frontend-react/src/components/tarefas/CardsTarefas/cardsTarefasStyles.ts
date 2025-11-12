@@ -4,13 +4,10 @@ export type TaskCardVisualState = {
   finished: boolean
   late: boolean
 }
-
 export function getCardContainerClasses({ finished, late }: TaskCardVisualState) {
   const base = `
     box-border flex flex-col
-    w-[445px] max-sm:w-[370px]  /* largura mobile do Figma */
-
-    w-[445px]
+    w-full min-w-0
     border rounded-lg
     px-4 py-3 gap-3 
     cursor-pointer select-none
@@ -21,12 +18,15 @@ export function getCardContainerClasses({ finished, late }: TaskCardVisualState)
   let extra = 'border-background-secondary'
 
   if (late && !finished) {
-    extra = 'border-white bg-[linear-gradient(258.85deg,#381D1D_0.2%,#553434_99.8%)]'
+    extra = `
+      border-danger-background
+      bg-danger-background/10
+      hover:bg-danger-background/15
+    `
   } else {
     extra = `
       border-background-secondary
-      hover:bg-[linear-gradient(258.85deg,#232323_0.2%,#393939_99.8%)]
-      active:bg-[linear-gradient(258.85deg,#232323_0.2%,#393939_99.8%)]
+      hover:bg-button-hover active:bg-button-pressed
       hover:border-white active:border-white
     `
   }
@@ -46,9 +46,8 @@ export function getDescriptionClasses({ finished }: TaskCardVisualState) {
     : 'mb-2 text-xs text-text-muted truncate max-w-full'
 }
 
-export function getDateChipClasses({ finished, late }: TaskCardVisualState) {
+export function getDateChipClasses({ late }: TaskCardVisualState) {
   if (late) {
-    // mantém o mesmo vermelho em ambos os casos
     return `
       flex items-center justify-center
       px-2 py-1 gap-2
@@ -58,7 +57,6 @@ export function getDateChipClasses({ finished, late }: TaskCardVisualState) {
     `
   }
 
-  // no prazo
   return `
     flex items-center justify-center
     px-2 py-1 gap-2
@@ -86,14 +84,10 @@ export function getDateTextClasses({ finished, late }: TaskCardVisualState) {
 export function getDateIconClasses({ finished, late }: TaskCardVisualState) {
   // atrasada
   if (late) {
-    // atrasada + finalizada → apagado
     if (finished) {
       return 'w-4 h-4 text-danger-background/40'
     }
-    // atrasada + não finalizada → vermelho forte
     return 'w-4 h-4 text-danger-background'
   }
-
-  // no prazo (on time) → cinza normal
   return 'w-4 h-4 text-text-muted'
 }

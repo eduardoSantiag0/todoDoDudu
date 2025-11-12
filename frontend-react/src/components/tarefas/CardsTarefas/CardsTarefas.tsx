@@ -2,21 +2,21 @@ import type { IdentificadorTarefa, Tarefa } from '../../../types/tarefa'
 import { PriorityTag } from './TagPrioridade'
 import { BotaoFinalizarTarefa } from '../../btns/BotaoFinalizarTarefa'
 import { BsFillCalendarWeekFill } from 'react-icons/bs'
-import { ConfirmarDelecao } from '../../modals/ConfirmarDelecao'
+import { AlertConfirmarDelecao } from '../../modals/AlertConfirmarDelecao'
 import { ContextMenuTarefa } from './ContextMenuTarefa'
 import React, { useState } from 'react'
+import { FormatadorData } from '../../../utils/FormatadorData'
 
 import {
-  getCardContainerClasses,
-  getDateChipClasses,
-  getDateIconClasses,
-  getDateTextClasses,
-  getDescriptionClasses,
-  getTitleClasses,
-
+    getCardContainerClasses,
+    getDateChipClasses,
+    getDateIconClasses,
+    getDateTextClasses,
+    getDescriptionClasses,
+    getTitleClasses,
 } from './cardsTarefasStyles'
 
-interface PropriedadesTaskCard {
+interface CardsTarefasProps {
     tarefa: Tarefa;
     aoDeletarTarefa: (idTarefa: IdentificadorTarefa) => void;
     aoIniciarArrasteTarefa: (tarefa: Tarefa) => void;
@@ -25,23 +25,25 @@ interface PropriedadesTaskCard {
         idTarefa: IdentificadorTarefa,
         tarefaJaFinalizada: boolean
     ) => void;
-    aoDuplicarTarefa: (tarefa: Tarefa) => void
+    aoDuplicarTarefa: (tarefa: Tarefa) => void;
 }
 
-
-export function TaskCard({
+export function CardsTarefas({
     tarefa,
     aoDeletarTarefa,
     aoIniciarArrasteTarefa,
     aoAbrirDetalhesTarefa,
     aoAlternarFinalizacaoTarefa,
     aoDuplicarTarefa,
-}: PropriedadesTaskCard) {
-
+}: CardsTarefasProps) {
     const [confirmacaoAberta, setConfirmacaoAberta] = useState(false)
 
-  const [menuAberto, setMenuAberto] = useState(false)
-  const [menuPosicao, setMenuPosicao] = useState<{ x: number; y: number } | null>(null)
+    const [menuAberto, setMenuAberto] = useState(false)
+    const [menuPosicao, setMenuPosicao] = useState<{
+        x: number;
+        y: number;
+    } | null>(null)
+
 
     function lidarInicioArraste(evento: React.DragEvent) {
         evento.dataTransfer.setData('tarefaId', String(tarefa.id))
@@ -49,127 +51,135 @@ export function TaskCard({
         aoIniciarArrasteTarefa(tarefa)
     }
 
-
-
-  function fecharMenu() {
-    setMenuAberto(false)
-  }
+    function fecharMenu() {
+        setMenuAberto(false)
+    }
     function confirmarDelecaoTarefa() {
         aoDeletarTarefa(tarefa.id)
         setConfirmacaoAberta(false)
     }
 
-    function lidarCliqueEsquerdo() {
-        aoAbrirDetalhesTarefa(tarefa)
-    }
-
-
     function lidarCliqueFinalizar() {
         aoAlternarFinalizacaoTarefa(tarefa.id, tarefaEstaFinalizada)
     }
 
-
     const tarefaEstaFinalizada = Boolean(tarefa.concluidoEm)
 
-    const hojeISO = new Date().toISOString().slice(0, 10)
-    const dataPrevista = tarefa.dataPrevistaConclusao
+    const hojeISO = FormatadorData.hojeISO()
 
-    const lateOpen = !!dataPrevista && !tarefaEstaFinalizada && dataPrevista < hojeISO
-    const lateDone = !!dataPrevista && tarefaEstaFinalizada && (tarefa.concluidoEm! > dataPrevista)
+    const dataPrevista = tarefa.dataEsperadaDeConclusao
 
+    const lateOpen =
+        !!dataPrevista && !tarefaEstaFinalizada && dataPrevista < hojeISO
+
+    const lateDone =
+        !!dataPrevista &&
+        tarefaEstaFinalizada &&
+        tarefa.concluidoEm! > dataPrevista
 
     const tarefaEstaAtrasada = lateOpen || lateDone
 
-    const dataPrevistaISO = tarefa.dataPrevistaConclusao
-        ? String(tarefa.dataPrevistaConclusao).slice(0, 10)
-        : null
 
     const visualState = {
         finished: tarefaEstaFinalizada,
         late: tarefaEstaAtrasada,
     }
 
-  function formatarDataLocal(iso: string) {
-    const [ano, mes, dia] = iso.split('-').map(Number)
-    const dataLocal = new Date(ano, mes - 1, dia)
-    return dataLocal.toLocaleDateString('pt-BR')
-  }
+    function formatarDataCard(iso: string) {
+        const [ano, mes, dia] = iso.split('-').map(Number)
+        const dataLocal = new Date(ano, mes - 1, dia)
+        return dataLocal.toLocaleDateString('pt-BR')
+    }
 
-  function abrirMenuContexto(e: React.MouseEvent<HTMLDivElement>) {
-    e.preventDefault()
-    e.stopPropagation()
-    setMenuPosicao({ x: e.clientX, y: e.clientY })
-    setMenuAberto(true)
-  }
+    function abrirMenuContexto(e: React.MouseEvent<HTMLDivElement>) {
+        e.preventDefault()
+        e.stopPropagation()
+        setMenuPosicao({ x: e.clientX, y: e.clientY })
+        setMenuAberto(true)
+    }
 
-  return (
-
-    <div
-    className={getCardContainerClasses(visualState) + ' relative'}
-    draggable
-    onDragStart={lidarInicioArraste}
-    // onContextMenu={lidarCliqueDireito}
-    // onClick={lidarCliqueEsquerdo}
-    onClick={() => aoAbrirDetalhesTarefa(tarefa)}  // <- abre painel
-    onContextMenu={abrirMenuContexto}
-    
-    >
-    <div className="flex items-center justify-between gap-2">
-        <PriorityTag prioridade={tarefa.prioridade} finished={tarefaEstaFinalizada} />
-        <BotaoFinalizarTarefa
-        tarefaEstaFinalizada={tarefaEstaFinalizada}
-        aoClicarBotao={lidarCliqueFinalizar}
-        />
-    </div>
-
-    <div className={getTitleClasses(visualState)}>
-        {tarefa.nome}
-    </div>
-
-    {tarefa.descricao && (
-        <p
-        className={getDescriptionClasses(visualState)}
-        title={tarefa.descricao}
+    return (
+        <div
+            className={
+                getCardContainerClasses(visualState) +
+                ' relative  w-full min-w-0 overflow-visible'
+            }
+            draggable
+            onDragStart={lidarInicioArraste}
+            onClick={() => aoAbrirDetalhesTarefa(tarefa)}
+            onContextMenu={abrirMenuContexto}
         >
-        {tarefa.descricao}
-        </p>
-    )}
+            <div className="w-full flex items-center justify-between gap-2">
+                <PriorityTag
+                    prioridade={tarefa.prioridade}
+                    finished={tarefaEstaFinalizada}
+                />
+                <BotaoFinalizarTarefa
+                    tarefaEstaFinalizada={tarefaEstaFinalizada}
+                    aoClicarBotao={lidarCliqueFinalizar}
+                />
+            </div>
 
-    {dataPrevistaISO && (
-        <div className={getDateChipClasses(visualState)}>
-        <BsFillCalendarWeekFill className={getDateIconClasses(visualState)} />
-        <span className={getDateTextClasses(visualState)}>
-            {formatarDataLocal(dataPrevistaISO)}
-        </span>
+            <div className="mb-1 text-sm font-semibold text-text-default w-full">
+                <p>
+                    {tarefa.nome}
+                </p>
+            </div>
+
+            {tarefa.descricao && (
+                <p
+                    className={
+                        getDescriptionClasses(visualState) +
+                        ' w-full wrap-break-word'
+                    }
+                    title={tarefa.descricao}
+                >
+                    {tarefa.descricao}
+                </p>
+            )}
+
+            {tarefa.dataEsperadaDeConclusao && (
+                <div
+                    className={
+                        getDateChipClasses(visualState) +
+                        ' inline-flex items-center gap-2'
+                    }
+                >
+                    <BsFillCalendarWeekFill
+                        className={getDateIconClasses(visualState)}
+                    />
+                    <span className={getDateTextClasses(visualState)}>
+                        {formatarDataCard(tarefa.dataEsperadaDeConclusao)}
+                    </span>
+                </div>
+            )}
+
+            <ContextMenuTarefa
+                visivel={menuAberto}
+                posicao={menuPosicao}
+                aoFechar={fecharMenu}
+                aoEditar={() => {
+                    aoAbrirDetalhesTarefa(tarefa)
+                    fecharMenu()
+                }}
+                aoDuplicar={() => {
+                    aoDuplicarTarefa(tarefa)
+                    fecharMenu()
+                }}
+                aoDeletar={() => {
+                    setConfirmacaoAberta(true)
+                    fecharMenu()
+                }}
+            />
+
+            {confirmacaoAberta && (
+                <AlertConfirmarDelecao
+                    tipo="Tarefa"
+                    nome={tarefa.nome}
+                    aoConfirmar={confirmarDelecaoTarefa}
+                    aoCancelar={() => setConfirmacaoAberta(false)}
+                />
+            )}
         </div>
-    )}
-
-      <ContextMenuTarefa
-        visivel={menuAberto}
-        posicao={menuPosicao}
-        aoFechar={fecharMenu}
-        aoEditar={() => {
-          aoAbrirDetalhesTarefa(tarefa)
-          fecharMenu()
-        }}
-        aoDuplicar={() => {
-          aoDuplicarTarefa(tarefa)
-          fecharMenu()
-        }}
-        aoDeletar={() => {
-          setConfirmacaoAberta(true)
-          fecharMenu()
-        }}
-      />
-
-    {confirmacaoAberta && (
-        <ConfirmarDelecao
-        tipo="Tarefa"
-        nome={tarefa.nome}
-        aoConfirmar={confirmarDelecaoTarefa}
-        aoCancelar={() => setConfirmacaoAberta(false)}
-        />
-    )}
-    </div>
-)
+    )
 }

@@ -1,36 +1,16 @@
 import { useRef } from 'react'
 import { BsFillCalendarWeekFill } from 'react-icons/bs'
+import { FormatadorData } from '../../../../utils/FormatadorData'
 
-interface PropriedadesDropdownDataConclusao {
-  /** Data em ISO "YYYY-MM-DD" ou string vazia */
+interface DropdownDataConclusaoProps {
   valorISO: string;
-  /** Callback com a nova data em ISO vinda do input */
   aoAlterarData: (novaDataISO: string) => void;
-}
-
-function formatarDataLocal(isoSemHora: string): string {
-  if (!isoSemHora) {return 'Sem data'}
-
-  // Divide a string "2025-12-01" em partes
-  const [ano, mes, dia] = isoSemHora.split('-').map(Number)
-
-  // Cria um Date no fuso LOCAL, sem converter UTC → Brasil
-  const data = new Date(ano, mes - 1, dia)
-
-  const diaStr = String(data.getDate()).padStart(2, '0')
-  const mesCurto = data
-    .toLocaleString('pt-BR', { month: 'short' })
-    .replace('.', '')
-    .toUpperCase()
-  const anoStr = data.getFullYear()
-
-  return `${diaStr} ${mesCurto}, ${anoStr}`
 }
 
 export function DropdownDataConclusao({
   valorISO,
   aoAlterarData,
-}: PropriedadesDropdownDataConclusao) {
+}: DropdownDataConclusaoProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   /** Abre o seletor de data do navegador ao clicar no container */
@@ -45,7 +25,7 @@ export function DropdownDataConclusao({
     }
   }
 
-  const label = valorISO ? formatarDataLocal(valorISO) : 'Sem data'
+  const label = valorISO ? FormatadorData.formatarDataLocal(valorISO) : 'Sem data'
 
   return (
     <button
@@ -57,7 +37,7 @@ export function DropdownDataConclusao({
         h-7 w-[226px]
         px-2 py-1
         gap-2
-        border border-[#4E4E4E]
+        border border-button-hover
         rounded-sm
         cursor-pointer
         bg-transparent
@@ -71,14 +51,11 @@ export function DropdownDataConclusao({
           text-[13.33px]
           leading-5
           font-semibold
-          font-poppins
-          text-white
         "
       >
         {label}
       </span>
 
-      {/* Input de data invisível, mas funcional */}
       <input
         ref={inputRef}
         type="date"
