@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.catijr.backend_java.application.dtos.ListaDTO;
-import com.catijr.backend_java.application.dtos.criar.CriarListasRequest;
+import com.catijr.backend_java.application.dtos.request.criar.CriarListasRequest;
 import com.catijr.backend_java.application.errors.ListaNaoEncontradaException;
 import com.catijr.backend_java.application.errors.NomeListaJaExisteException;
 import com.catijr.backend_java.infra.entities.ListaEntity;

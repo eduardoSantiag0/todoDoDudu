@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import type { IdentificadorLista } from '../../types/lista'
 import { PrioridadeTarefa } from '../../types/tarefa'
+import { useBoard } from '../../context/BoardContext'
 
 type Props = {
   listaId: IdentificadorLista;
@@ -20,6 +21,12 @@ export function CriarTarefaForm({ listaId, onCreate, onCancel }: Props) {
   const [descricao, setDescricao] = useState('')
   const [prioridade, setPrioridade] = useState<PrioridadeTarefa>(PrioridadeTarefa.LOW)
   const [data, setData] = useState('')
+  const { tarefaSelecionada, exibirMensagemSnapback } = useBoard()
+
+
+  const exibirMensagem = (msg: string) => {
+    exibirMensagemSnapback(msg)
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

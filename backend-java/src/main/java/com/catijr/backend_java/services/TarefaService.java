@@ -1,8 +1,8 @@
 package com.catijr.backend_java.services;
 
 
-import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosTarefaRequest;
-import com.catijr.backend_java.application.dtos.criar.CriarTarefasRequest;
+import com.catijr.backend_java.application.dtos.request.atualizar.AtualizarDadosTarefaRequest;
+import com.catijr.backend_java.application.dtos.request.criar.CriarTarefasRequest;
 import com.catijr.backend_java.application.dtos.TarefaDTO;
 import com.catijr.backend_java.application.dtos.response.TarefaCriadaResponse;
 import com.catijr.backend_java.application.errors.DataInvalidaException;

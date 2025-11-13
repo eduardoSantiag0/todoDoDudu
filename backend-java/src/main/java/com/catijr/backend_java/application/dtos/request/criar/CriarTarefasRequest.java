@@ -1,4 +1,4 @@
-package com.catijr.backend_java.application.dtos.criar;
+package com.catijr.backend_java.application.dtos.request.criar;
 import com.catijr.backend_java.infra.entities.EPrioridade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

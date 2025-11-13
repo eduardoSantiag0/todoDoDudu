@@ -1,8 +1,8 @@
 package com.catijr.backend_java.application.controllers;
 
 import com.catijr.backend_java.application.dtos.response.ListaCriadaResponse;
-import com.catijr.backend_java.application.dtos.atualizar.AtualizarDadosListaRequest;
-import com.catijr.backend_java.application.dtos.criar.CriarListasRequest;
+import com.catijr.backend_java.application.dtos.request.atualizar.AtualizarDadosListaRequest;
+import com.catijr.backend_java.application.dtos.request.criar.CriarListasRequest;
 import com.catijr.backend_java.application.dtos.ListaDTO;
 import com.catijr.backend_java.services.ListasService;
 import jakarta.validation.Valid;

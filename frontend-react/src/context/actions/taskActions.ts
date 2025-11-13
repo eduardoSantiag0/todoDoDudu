@@ -11,13 +11,13 @@ import type {
   Tarefa,
 } from '../../types/tarefa'
 import type { AtualizarTarefaRequisicao } from '../../queries/tarefasApi'
-import type { TarefasPorLista } from './boardTypes'
+import type { TarefasPorLista } from '../board/boardTypes'
 import {
   moverTarefaOtimista,
   removerTarefaDeTodas,
   substituirTarefaEmTodas,
-} from './boardUtils'
-import { agruparTarefasPorLista } from './boardUtils'
+} from '../board/boardUtils'
+import { agruparTarefasPorLista } from '../board/boardUtils'
 import type { Lista } from '../../types/lista'
 
 type Deps = {
@@ -46,9 +46,13 @@ export function criarAcoesDeTarefa({
     prioridade: PrioridadeTarefa,
     dataEsperadaDeConclusaoISO: string,
   ) {
-    if (!dataEsperadaDeConclusaoISO) {
-      alert('Escolha uma data de conclusão para a tarefa.')
-      return
+    // if (!dataEsperadaDeConclusaoISO) {
+    //   alert('Escolha uma data de conclusão para a tarefa.')
+    //   return
+    // }
+
+    if (dataEsperadaDeConclusaoISO == null) {
+      exibirMensagem('É necessário escolher uma data de conclusão')
     }
     try {
       const criada = await criarNovaTarefa({
@@ -115,7 +119,6 @@ export function criarAcoesDeTarefa({
     } catch (e) {
       console.error(e)
       setErro('Erro ao mover tarefa entre listas. Recarregando quadro.')
-      // fallback: recarrega tarefas e reagrupa
       const tarefas = await buscarTodasAsTarefas()
       const listas = getListas()
       setMapa(agruparTarefasPorLista(listas, tarefas))

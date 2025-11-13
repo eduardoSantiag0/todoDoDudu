@@ -4,7 +4,7 @@ import {
   deletarListaPorId,
 } from '../../queries/listasApi'
 import type { IdentificadorLista, Lista } from '../../types/lista'
-import type { TarefasPorLista } from './boardTypes'
+import type { TarefasPorLista } from '../board/boardTypes'
 
 type Deps = {
   setListas: React.Dispatch<React.SetStateAction<Lista[]>>

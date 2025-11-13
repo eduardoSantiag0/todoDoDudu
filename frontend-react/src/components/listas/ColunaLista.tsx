@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { IdentificadorLista } from '../../types/lista'
 import {
     IdentificadorTarefa,
@@ -10,7 +10,7 @@ import { CardsTarefas } from '../tarefas/CardsTarefas/CardsTarefas'
 import { AlertConfirmarDelecao } from '../modals/AlertConfirmarDelecao'
 import { BotaoAcaoComPlus } from '../btns/BotaoAcaoComPlus'
 import { CabecalhoCard } from '../btns/BotaoListaOpcoes'
-import { CriarTarefaForm } from './CriarTarefaForm'
+import { CriarTarefaForm } from '../tarefas/CriarTarefaForm'
 
 interface Props {
     idLista: IdentificadorLista;
@@ -54,9 +54,14 @@ export function ColunaLista({ idLista, nomeLista }: Props) {
         )
     }
 
-    const tarefasOrdenadas = [...tarefas].sort((a, b) => {
-        return ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade]
-    })
+    const tarefasOrdenadas = useMemo(
+    () =>
+        [...tarefas].sort(
+        (a, b) =>
+            ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade],
+        ),
+    [tarefas], 
+    )
 
     return (
         <section
