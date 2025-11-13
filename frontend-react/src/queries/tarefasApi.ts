@@ -51,6 +51,8 @@ export async function buscarTodasAsTarefas(): Promise<Tarefa[]> {
 
   const dados = resposta.data
 
+  console.log('RESPOSTA DO BACKEND:', resposta.data)
+
   const tarefasConvertidas: Tarefa[] = dados.map(
     (tarefaResposta) => ({
       id: tarefaResposta.id,

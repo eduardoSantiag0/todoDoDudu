@@ -70,7 +70,7 @@ export function ColunaLista({ idLista, nomeLista }: Props) {
                 w-full h-auto overflow-visible
                 md:w-[401px] md:min-w-[401px] md:h-full
                 md:overflow-y-auto
-                box-border min-h-[859px] shrink-0  rounded-xl
+                box-border h-auto shrink-0 rounded-xl
                 bg-background-main  border
                 border-button-hover
                 p-4 pb-6 gap-3"

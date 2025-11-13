@@ -11,7 +11,6 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 import java.sql.Types;
 
 @Entity
@@ -24,7 +23,7 @@ public class ImagemEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "tarefa_id", nullable = false)
-    private TarefaEntity tarefaId;
+    private TarefaEntity tarefa;
 
     @Column(name = "nome_arquivo", nullable = false)
     private String nome;
@@ -38,7 +37,7 @@ public class ImagemEntity {
     private byte[] imagemDados;
 
     public ImagemEntity(TarefaEntity tarefaId, String nome, String tipo, byte[] imagemDados) {
-        this.tarefaId = tarefaId;
+        this.tarefa = tarefaId;
         this.nome = nome;
         this.tipo = tipo;
         this.imagemDados = imagemDados;
@@ -51,8 +50,8 @@ public class ImagemEntity {
         return id;
     }
 
-    public TarefaEntity getTarefaId() {
-        return tarefaId;
+    public TarefaEntity getTarefa() {
+        return tarefa;
     }
 
     public String getNome() {

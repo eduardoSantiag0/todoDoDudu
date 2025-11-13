@@ -1,14 +1,15 @@
 // src/queries/imagensApi.ts
 import type { Imagem } from '../types/imagem'
 
-const API_BASE_URL = 'http://localhost:8080'
+// const API_BASE_URL = 'http://localhost:8080'
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 
 export async function listarImagensDaTarefa(
   tarefaId: number,
 ): Promise<Imagem[]> {
   const resposta = await fetch(
-    `${API_BASE_URL}/api/v1/tasks/${tarefaId}/imagens`,
+    `tasks/${tarefaId}/imagens`,
   )
 
   if (!resposta.ok) {
@@ -30,7 +31,7 @@ export async function uploadImagemDaTarefa(
   
   try {
     resposta = await fetch(
-      `${API_BASE_URL}/api/v1/tasks/${tarefaId}/imagens`,
+      `tasks/${tarefaId}/imagens`,
       {
         method: 'POST',
         body: formData,
@@ -69,5 +70,5 @@ export async function deletarImagem(imagemId: number): Promise<void> {
 }
 
 export function montarUrlImagem(imagemId: number): string {
-  return `${API_BASE_URL}/api/v1/tasks/imagens/${imagemId}`
+  return `tasks/imagens/${imagemId}`
 }

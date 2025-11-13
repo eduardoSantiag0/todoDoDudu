@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS listas (
 CREATE TABLE IF NOT EXISTS tarefas (
     id SERIAL PRIMARY KEY,
     data_conclusao_esperada DATE,
-    nome VARCHAR(255) NOT NULL
+    nome VARCHAR(255) NOT NULL,
     descricao TEXT,
     prioridade VARCHAR (10) NOT NULL,
 

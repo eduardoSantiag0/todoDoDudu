@@ -4,6 +4,7 @@ import com.catijr.backend_java.application.dtos.request.criar.CriarTarefasReques
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "tarefas")
@@ -32,6 +33,11 @@ public class TarefaEntity {
 
     @Column(name = "concluida_em")
     private LocalDate concluidaEm;
+
+    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImagemEntity> imagens;
+
+
 
 
     public TarefaEntity() {
