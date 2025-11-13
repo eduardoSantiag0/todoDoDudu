@@ -1,6 +1,6 @@
 package com.catijr.backend_java.infra.entities;
 
-import com.catijr.backend_java.application.dtos.criar.CriarTarefasRequest;
+import com.catijr.backend_java.application.dtos.request.criar.CriarTarefasRequest;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

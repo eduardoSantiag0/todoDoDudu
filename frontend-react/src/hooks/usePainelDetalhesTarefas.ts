@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { PrioridadeTarefa } from '../types/tarefa'
 import { useBoard } from '../context/BoardContext'
+// import type { Imagem } from '../../../types/imagem'
 
 export function usePainelDetalhesTarefa() {
     const {

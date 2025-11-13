@@ -1,0 +1,27 @@
+v# Maven e build
+target
+!.mvn/wrapper/maven-wrapper.jar
+.mvn
+*.iml
+
+# Logs
+*.log
+
+# IDEs e SO
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Git e configs locais
+.git
+.gitignore
+
+# Arquivos temporários
+*.swp
+*.tmp
+*.bak
+
+# Docker
+Dockerfile
+docker-compose.yml

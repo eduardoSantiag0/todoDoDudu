@@ -1,4 +1,4 @@
-package com.catijr.backend_java.application.dtos.atualizar;
+package com.catijr.backend_java.application.dtos.request.atualizar;
 
 import com.catijr.backend_java.infra.entities.EPrioridade;
 import java.time.LocalDate;

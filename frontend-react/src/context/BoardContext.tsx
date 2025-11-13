@@ -4,6 +4,7 @@ import {
     useContext,
     useEffect,
     useState,
+    useMemo
 } from 'react'
 
 import { buscarTodasAsListas } from '../queries/listasApi'
@@ -14,9 +15,8 @@ import type { Tarefa } from '../types/tarefa'
 
 import type { BoardContextValue } from './board/boardTypes'
 import { agruparTarefasPorLista } from './board/boardUtils'
-import { criarAcoesDeLista } from './board/listActions'
-import { criarAcoesDeTarefa } from './board/taskActions'
-import { selecionarTarefasDaLista } from './board/selectors'
+import { criarAcoesDeLista } from './actions/listActions'
+import { criarAcoesDeTarefa } from './actions/taskActions'
 import type { TarefasPorLista } from './board/boardTypes'
 
 const BoardContext = createContext<BoardContextValue | null>(null)
@@ -28,8 +28,14 @@ export function useBoard() {
     return ctx
 }
 
+function selecionarTarefasDaLista(
+    mapa: TarefasPorLista,
+    id: IdentificadorLista,
+): Tarefa[] {
+    return mapa[id] ?? []
+}
+
 export function BoardProvider({ children }: { children: ReactNode }) {
-    // --- Estado base
     const [listas, setListas] = useState<Lista[]>([])
     const [tarefasPorListaId, setTarefasPorListaId] = useState<TarefasPorLista>(
         {},
@@ -44,13 +50,11 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         null,
     )
 
-    // --- Helpers UI
     function exibirMensagemSnapback(msg: string) {
         setMensagemSnapback(msg)
         setTimeout(() => setMensagemSnapback(null), 3000)
     }
 
-    // --- Carga inicial
     async function carregarQuadro() {
         try {
             setCarregandoQuadro(true)
@@ -75,7 +79,6 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         void carregarQuadro()
     }, [])
 
-    // --- Ações (divididas por domínio)
     const { criarLista, renomearLista, deletarLista } = criarAcoesDeLista({
         setListas,
         setTarefasPorListaId,
@@ -99,12 +102,10 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         getListas: () => listas,
     })
 
-    // --- Seletores expostos com mesma API
     function tarefasDaLista(id: IdentificadorLista) {
         return selecionarTarefasDaLista(tarefasPorListaId, id)
     }
 
-    // --- UI helpers expostos
     function abrirDetalhes(t: Tarefa) {
         setTarefaSelecionada(t)
     }
@@ -116,9 +117,10 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     }
     function fecharSnapback() {
         setMensagemSnapback(null)
-    }
+        }
 
-    const value: BoardContextValue = {
+    const value = useMemo<BoardContextValue>(
+    () => ({
         listas,
         tarefasPorListaId,
         tarefaSelecionada,
@@ -143,7 +145,19 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         fecharDetalhes,
         marcarNotificacaoVista,
         fecharSnapback,
-    }
+        exibirMensagemSnapback,
+    }),
+    [
+        listas,
+        tarefasPorListaId,
+        tarefaSelecionada,
+        carregandoQuadro,
+        mensagemErro,
+        mensagemSnapback,
+        temNotificacao,
+    ],
+    )
+    
 
     return (
         <BoardContext.Provider value={value}>{children}</BoardContext.Provider>

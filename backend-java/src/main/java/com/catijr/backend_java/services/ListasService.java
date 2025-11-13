@@ -1,7 +1,7 @@
 package com.catijr.backend_java.services;
 
 import com.catijr.backend_java.application.dtos.response.ListaCriadaResponse;
-import com.catijr.backend_java.application.dtos.criar.CriarListasRequest;
+import com.catijr.backend_java.application.dtos.request.criar.CriarListasRequest;
 import com.catijr.backend_java.application.dtos.ListaDTO;
 import com.catijr.backend_java.application.errors.ListaNaoEncontradaException;
 import com.catijr.backend_java.application.errors.NomeListaJaExisteException;

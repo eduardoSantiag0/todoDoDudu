@@ -39,5 +39,7 @@ export type BoardContextValue = {
   abrirDetalhes: (t: Tarefa) => void
   fecharDetalhes: () => void
   marcarNotificacaoVista: () => void
+  exibirMensagemSnapback: (msg: string) => void
   fecharSnapback: () => void
+
 }

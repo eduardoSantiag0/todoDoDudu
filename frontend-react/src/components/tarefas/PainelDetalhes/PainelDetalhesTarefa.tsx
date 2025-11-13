@@ -10,6 +10,7 @@ import {
   SecaoData,
   SecaoDescricao,
   SecaoNome, 
+  SecaoImagens
 } from './PainelDetalhesPartes'
 
 export function PainelDetalhesTarefa() {
@@ -108,6 +109,10 @@ export function PainelDetalhesTarefa() {
                 onChangeDescricao={setDescricaoEditada}
                 onBlurDescricao={lidarBlurDescricao}
               />
+
+              <div className={divisor } />
+
+              <SecaoImagens />
 
               <div className={divisor } />
 

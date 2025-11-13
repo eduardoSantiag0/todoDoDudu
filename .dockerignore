@@ -1,0 +1,21 @@
+# Geral
+.git
+.gitignore
+README.md
+LICENSE
+.DS_Store
+.vscode
+.idea
+
+# Dependências pesadas
+node_modules
+target
+
+# Builds locais
+build
+dist
+coverage
+
+# Docker
+Dockerfile
+docker-compose.yml
