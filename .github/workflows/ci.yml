@@ -41,7 +41,7 @@ jobs:
         run: mvn -version
 
       - name: Build e teste 
-        working-directory: ./backend
+        working-directory: ./backend-java
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/
           DB_USER: postgres
@@ -50,7 +50,7 @@ jobs:
         run: mvn clean verify -DskipTests=false
 
       - name: Criando JAR
-        working-directory: ./backend
+        working-directory: ./backend-java
         run: mvn package -DskipTests
 
       - name: Upload artifact
@@ -76,11 +76,11 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
-        working-directory: ./frontend
+        working-directory: ./frontend-react
         run: npm ci
 
       - name: Build frontend
-        working-directory: ./frontend
+        working-directory: ./frontend-react
         run: npm run build
 
       - name: Upload frontend artifact
