@@ -1,5 +1,5 @@
-INSERT INTO listas (nome) VALUES ('Estudar');
-INSERT INTO listas (nome) VALUES ('A Fazer');
+INSERT INTO listas (id, nome) VALUES (101, 'Estudar');
+INSERT INTO listas (id, nome) VALUES (102, 'A Fazer');
 
 
 INSERT INTO tarefas (
@@ -10,7 +10,7 @@ INSERT INTO tarefas (
     data_conclusao_esperada,
     concluida_em
 ) VALUES (
-    1,
+    101,
     'Ver stories da Virginia',
     NULL,
     'VERY_HIGH',
@@ -26,7 +26,7 @@ INSERT INTO tarefas (
     data_conclusao_esperada,
     concluida_em
 ) VALUES (
-    1,
+    101,
     'Não chegar atrasado no Enem',
     'Dessa vez eu vou conseguir!',
     'MEDIUM',
@@ -43,7 +43,7 @@ INSERT INTO tarefas (
     data_conclusao_esperada,
     concluida_em
 ) VALUES (
-    2,
+    102,
     'Pagar aluguel',
     'Esperando cair o pix',
     'HIGH',
@@ -59,7 +59,7 @@ INSERT INTO tarefas (
     data_conclusao_esperada,
     concluida_em
 ) VALUES (
-    2,
+    102,
     'Task Title',
     'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
     'LOW',

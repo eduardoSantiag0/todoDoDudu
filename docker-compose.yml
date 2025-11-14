@@ -23,6 +23,7 @@ services:
       context: ./backend-java/
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/
+      # - BD_HOST=postgresql
       - DB_NAME=todolist-db
       - DB_USER=postgres
       - DB_PASSWORD=password
@@ -34,7 +35,7 @@ services:
     networks:
       - todo-network
   
-  frontend:
+  frontend:  
     build:
       context: ./frontend-react/
     ports:
@@ -43,8 +44,6 @@ services:
       - todo-network
     depends_on:
       - backend
-
-    
 networks:
   todo-network:
     driver: bridge
