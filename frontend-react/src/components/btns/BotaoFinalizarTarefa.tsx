@@ -40,19 +40,18 @@ export function BotaoFinalizarTarefa({
             w-8 h-8
             rounded-full
             border border-dashed border-priority-low-text
+            cursor-pointer
           "
         >
           <BsCheck2 className="text-priority-low-text" />
         </span>
 
-        {/* texto FINALIZADO sem fundo, só na cor low priority */}
         <span
           className="
             text-priority-low-text
             text-[16px]
             leading-[100%]
-            font-normal
-            font-poppins
+            cursor-pointer
           "
         >
           Finalizado
@@ -82,6 +81,7 @@ export function BotaoFinalizarTarefa({
           w-8 h-8
           rounded-full
           border border-dashed border-text-default
+          cursor-pointer
         "
       >
         <BsCheck2 className="text-text-default text-base" />
@@ -93,6 +93,7 @@ export function BotaoFinalizarTarefa({
           leading-[100%]
           font-normal
           text-text-default text-base
+          cursor-pointer
         "
       >
         Finalizar

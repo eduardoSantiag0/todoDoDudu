@@ -11,6 +11,7 @@ public interface ImagemRepository extends JpaRepository<ImagemEntity, Long> {
     @Override
     Optional<ImagemEntity> findById(Long id);
 
-    List<ImagemEntity> findByTarefaId(TarefaEntity tarefa);
+    List<ImagemEntity> findByTarefaId(Long tarefaId);
+
 
 }

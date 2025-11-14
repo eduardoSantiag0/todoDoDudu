@@ -73,7 +73,7 @@ export function ColunaLista({ idLista, nomeLista }: Props) {
                 box-border h-auto shrink-0 rounded-xl
                 bg-background-main  border
                 border-button-hover
-                p-4 pb-6 gap-3"
+                p-4 pb-6 gap-3 "
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => {
                 e.preventDefault()

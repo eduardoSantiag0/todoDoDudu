@@ -59,7 +59,7 @@ public class ImagemService {
         TarefaEntity tarefa = tarefaRepository.findById(tarefaId)
                 .orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa nao encontrada"));
 
-        List<ImagemEntity> entities = imagemRepository.findByTarefaId(tarefa);
+        List<ImagemEntity> entities = imagemRepository.findByTarefaId(tarefa.getId());
 
 
         return entities.stream()

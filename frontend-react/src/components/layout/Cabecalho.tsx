@@ -60,6 +60,7 @@ export function CabecalhoAplicacao({
             hidden md:flex items-center
             h-9 rounded-xl px-4 gap-2
             btn-transition hover:bg-button-hover
+            cursor-pointer
           "
         >
           <RiAccountCircleFill className="text-2xl" />

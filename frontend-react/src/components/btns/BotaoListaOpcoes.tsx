@@ -52,7 +52,7 @@ export function CabecalhoCard({
         <div className={`mb-2 flex items-center justify-between gap-2 ${ className ?? '' }`} >
 
             {!editandoTitulo ? (
-                <div className="flex-1 text-left text-sm font-semibold btn-text"  >
+                <div className="flex-1 text-left text-sm font-semibold btn-text "  >
                     {nomeLista}
                 </div>
             ) : <input
@@ -65,7 +65,7 @@ export function CabecalhoCard({
                 />
             }
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 ">
                 <BotaoOpcoesLista
                     aoClicarRenomearLista={abrirEdicao}
                     aoClicarExcluirLista={onExcluir}

@@ -49,12 +49,12 @@ export function SecaoData({
       </div>
 
       {/* Prioridade */}
-      <div className="flex w-full items-center justify-between gap-4">
+      <div className="flex w-full items-center justify-between gap-4 ">
         <span className="text-[16px] leading-6 font-semibold ">
           Prioridade
         </span>
 
-        <DropdownPrioridade
+        <DropdownPrioridade 
           prioridadeSelecionada={prioridade}
           aoSelecionarPrioridade={aoAlterarPrioridade}
         />
@@ -130,6 +130,7 @@ export function BotaoExcluirTarefa({ onClick }: BotaoExcluirTarefaProps) {
                 leading-6
                 rounded-sm
                 transition-all duration-200
+                cursor-pointer
             "
         >
             <AiFillDelete className="w-4 h-4 text-danger-background" />
@@ -189,13 +190,14 @@ export function SecaoNome({
           ref={inputRef}
           className="
             mx-auto
-            w-[473px] h-[50px]
-            font-poppins font-bold
+            w-[473px]
+            font-bold
             text-[33.18px] leading-[50px]
             rounded-lg border
             border-text-muted
             focus:ring-success-background bg-background-main 
             text-text-default placeholder:text-text-muted
+            wrap-break-word
           "
           value={nome}
           onChange={(e) => onChangeNome(e.target.value)}
@@ -206,10 +208,10 @@ export function SecaoNome({
         <p
           className="
             mx-auto
-            w-[473px] h-[50px]
+            w-[473px] 
             font-poppins font-bold
             text-[33.18px] leading-[50px]
-            cursor-text
+            cursor-text break-words
           "
           onClick={() => setEditando(true)}
         >

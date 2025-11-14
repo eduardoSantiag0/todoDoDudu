@@ -19,7 +19,7 @@ export function BotaoFecharPainelDetalhes({
     <button
       type="button"
       onClick={lidarClique}
-      className="btn btn-ghost"
+      className="btn btn-ghost cursor-pointer"
     >
       <BsArrowBarRight className="w-6 h-6 text-white" />
     </button>

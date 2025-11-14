@@ -36,8 +36,8 @@ public class ImagemEntity {
     @JdbcTypeCode(Types.BINARY)
     private byte[] imagemDados;
 
-    public ImagemEntity(TarefaEntity tarefaId, String nome, String tipo, byte[] imagemDados) {
-        this.tarefa = tarefaId;
+    public ImagemEntity(TarefaEntity tarefa, String nome, String tipo, byte[] imagemDados) {
+        this.tarefa = tarefa;
         this.nome = nome;
         this.tipo = tipo;
         this.imagemDados = imagemDados;

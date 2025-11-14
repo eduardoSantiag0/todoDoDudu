@@ -40,12 +40,12 @@ export function BotaoOpcoesLista({
           hover:bg-button-hover
           transition-all duration-200 ease-out
           active: bg-button-notification-pressed
+          cursor-pointer
         "
       >
         <span className="text-xl leading-none">⋯</span>
       </button>
 
-      {/* Mini menu */}
       {menuAberto && (
         <div
           className="
@@ -66,6 +66,7 @@ export function BotaoOpcoesLista({
               text-left text-xs
               text-text-default
               hover:bg-button-hover
+              cursor-pointer
             "
           >
             Renomear lista
@@ -79,6 +80,7 @@ export function BotaoOpcoesLista({
               text-left text-xs
               text-danger-background
               hover:bg-danger-background/20
+              cursor-pointer
             "
           >
             Excluir lista

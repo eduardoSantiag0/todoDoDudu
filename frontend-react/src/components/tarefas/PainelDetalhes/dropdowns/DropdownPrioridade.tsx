@@ -66,7 +66,7 @@ export function DropdownPrioridade({
                 <div
                     className={`
             flex items-center justify-center gap-2 px-4 py-1 rounded
-            ${prioridadeAtual.bg}
+            ${prioridadeAtual.bg} cursor-pointer
           `}
                 >
                     <span

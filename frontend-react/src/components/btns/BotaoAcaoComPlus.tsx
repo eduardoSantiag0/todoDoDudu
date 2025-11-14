@@ -12,7 +12,6 @@ export function BotaoAcaoComPlus({ aoClicar, texto }: BotaoAcaoComPlusProps) {
       onClick={aoClicar}
       className="
         flex flex-row items-center
-        w-[300px] h-[45px]
         rounded-[12px]
         p-2
         gap-2

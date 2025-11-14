@@ -96,10 +96,10 @@ export function CriarTarefaForm({ listaId, onCreate, onCancel }: Props) {
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
-        <button type="button" className="btn btn-ghost" onClick={onCancel}>
+        <button type="button" className="btn btn-ghost cursor-pointer" onClick={onCancel}>
           Cancelar
         </button>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary cursor-pointer">
           Criar
         </button>
       </div>
