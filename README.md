@@ -43,5 +43,5 @@ Serviços iniciados:
 
 2. **Acesse pelo navegador**: 
 ```bash
-http://localhost:3080
+http://localhost:3000
 ```

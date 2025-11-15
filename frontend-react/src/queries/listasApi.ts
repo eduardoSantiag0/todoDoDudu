@@ -13,9 +13,9 @@ export async function buscarTodasAsListas(): Promise<Lista[]> {
 }
 
 export async function criarNovaLista(
-  nome: string,
+  nomeLista: string,
 ): Promise<Lista> {
-    const resposta = await clienteApi.post('/lists', { nome })
+    const resposta = await clienteApi.post('/lists', { nomeLista })
     const listaCriada = resposta.data as Lista
     return listaCriada
   }
