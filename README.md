@@ -21,7 +21,7 @@
 - Layout fiel ao design no Figma
 - Responsividade no frontend
 - Upload e download de imagens para tarefas
-- Deploy completo da aplicação no Render
+- Deploy completo da aplicação no Render utilizando Continuous Integration pelo Github Actions. ( O Continuous Deployment é gerenciado automaticamente pelo próprio Render )
 
 
 ## Screenshots 
