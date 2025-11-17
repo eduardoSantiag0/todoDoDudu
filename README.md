@@ -15,7 +15,7 @@
 
 ### 💯 Todos os desafios propostos foram concluídos:
 - CRUD completo de Listas e Tarefas
-- Validações e tratamento de erros robusto
+- Validações e tratamento de erros
 - Testes unitários implementados para o backend (CRUD de listas ou tarefas)
 - Funcionalidade de drag and drop para mover tarefas entre listas
 - Layout fiel ao design no Figma
