@@ -23,6 +23,14 @@
 - Upload e download de imagens para tarefas
 - Deploy completo da aplicação no Render
 
+
+## Screenshots 
+<img src="screenshots/Fullscreen.png" width="600" />
+
+<img src="screenshots/Mobile.png" width="600" />
+
+<img src="screenshots/Task_panel.jpeg" width="600" />
+
 ## Como testar a aplicação: 
 
 ### 🪄 Acesse o site: 
@@ -35,7 +43,7 @@ docker-compose up --build
 ```
 
 Serviços iniciados:
-- **Frontend:** http://localhost:3080
+- **Frontend:** http://localhost:3000
 - **API:** http://localhost:8080
 - **Postgres:** localhost:5433
 
